@@ -1,5 +1,11 @@
+import 'dart:io';
+import 'dart:math';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:modu_messanger/helper/dialogs.dart';
 import 'package:modu_messanger/screens/home_screen.dart';
 
 import '../../main.dart';
@@ -23,6 +29,50 @@ class _LoginScreenState extends State<LoginScreen> {
         _isAnimated = true;
       });
     });
+  }
+
+  _handleGoogleBtnClick() {
+    _signInWithGoogle().then((user) => {
+      if(user != null) {
+        print('User : ${user.user}'),
+        print('UserAdditionalInfo : ${user.additionalUserInfo}'),
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (_) => const HomeScreen()
+            )
+        )
+      }
+    }) ;
+  }
+
+  Future<UserCredential?> _signInWithGoogle() async {
+    try {
+      await InternetAddress.lookup('google.com');
+      // Trigger the authentication flow
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+
+      // Once signed in, return the UserCredential
+      return await FirebaseAuth.instance.signInWithCredential(credential);
+    } catch(e) {
+      print("error" + e.toString());
+      Dialogs.showSnackbar(context, '네트워크 확인해보셈');
+      return null;
+    }
+  }
+
+  _signOut() async {
+    await FirebaseAuth.instance.signOut();
+    await GoogleSignIn().signOut();
   }
 
 
@@ -59,9 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     elevation: 1,
                   ),
                   onPressed: () {
-                    Navigator.pushReplacement(
-                        context, MaterialPageRoute(
-                        builder: (_) => const HomeScreen()));
+                    _handleGoogleBtnClick();
                   },
                   icon: Image.asset(
                     'images/google.png',
