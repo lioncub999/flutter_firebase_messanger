@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>483669063544-k3r5192ubhs0o4m37csvatpo64hissdq.apps.googleusercontent.com</string>
+	<string>483669063544-6kp24imn43qsv5i9i3s34da74s5jct8e.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.483669063544-k3r5192ubhs0o4m37csvatpo64hissdq</string>
+	<string>com.googleusercontent.apps.483669063544-6kp24imn43qsv5i9i3s34da74s5jct8e</string>
 	<key>API_KEY</key>
 	<string>AIzaSyA9Tt1Uy9NDjQHDsIbKOjpoDKoysx68NeI</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.moduMessanger</string>
+	<string>com.example.moduMessengerFirebase</string>
 	<key>PROJECT_ID</key>
 	<string>wechat-703d0</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:483669063544:ios:681cc0bf287f34ff5c7a8d</string>
+	<string>1:483669063544:ios:f55c551778f0f5ee5c7a8d</string>
 </dict>
 </plist>

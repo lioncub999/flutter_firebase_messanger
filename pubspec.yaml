@@ -1,4 +1,4 @@
-name: modu_messanger
+name: modu_messenger_firebase
 description: "A new Flutter project."
 
 publish_to: 'none'
@@ -11,19 +11,39 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
+  flutter_launcher_icons: ^0.13.0
+
   cupertino_icons: ^1.0.6
-  firebase_core: ^2.2.0
+
+  firebase_core : ^2.0.0
 
   firebase_auth : ^4.1.3
 
-  google_sign_in: ^5.4.2
+  google_sign_in : ^5.4.2
 
-  flutter_launcher_icons: "^0.10.0"
+  cloud_firestore: ^4.1.0
 
-flutter_icons:
+
+
+flutter_launcher_icons:
+  android: "ic_launcher"
   ios: true
   image_path: "images/icon.png"
-
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  remove_alpha_ios: true
+  web:
+    generate: true
+    image_path: "path/to/image.png"
+    background_color: "#hexcode"
+    theme_color: "#hexcode"
+  windows:
+    generate: true
+    image_path: "path/to/image.png"
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "path/to/image.png"
 
 dev_dependencies:
   flutter_test:
@@ -33,6 +53,7 @@ dev_dependencies:
 
 flutter:
 
-  assets:
-    - images/
   uses-material-design: true
+
+  assets :
+    - images/

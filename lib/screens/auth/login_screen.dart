@@ -1,13 +1,10 @@
-import 'dart:io';
-import 'dart:math';
-
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:modu_messanger/helper/dialogs.dart';
-import 'package:modu_messanger/screens/home_screen.dart';
+import 'package:modu_messenger_firebase/helper/dialogs.dart';
+import 'package:modu_messenger_firebase/screens/home_screen.dart';
 
+import '../../api/apis.dart';
 import '../../main.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -18,42 +15,36 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  bool _isAnimated = false;
+  bool _isAnimate = false;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    Future.delayed(Duration(microseconds: 500), (){
+    Future.delayed(const Duration(milliseconds: 500), () {
       setState(() {
-        _isAnimated = true;
+        _isAnimate = true;
       });
     });
   }
 
   _handleGoogleBtnClick() {
-    _signInWithGoogle().then((user) => {
-      if(user != null) {
-        print('User : ${user.user}'),
-        print('UserAdditionalInfo : ${user.additionalUserInfo}'),
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (_) => const HomeScreen()
-            )
-        )
-      }
-    }) ;
+    Dialogs.showProgressBar(context);
+    _signInWithGoogle().then((user) {
+      Navigator.pop(context);
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (_) => const HomeScreen()));
+      Dialogs.showSnackbar(context, '로그인 되었습니다');
+    });
   }
 
   Future<UserCredential?> _signInWithGoogle() async {
     try {
-      await InternetAddress.lookup('google.com');
       // Trigger the authentication flow
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
       // Obtain the auth details from the request
-      final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
 
       // Create a new credential
       final credential = GoogleAuthProvider.credential(
@@ -62,69 +53,54 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       // Once signed in, return the UserCredential
-      return await FirebaseAuth.instance.signInWithCredential(credential);
-    } catch(e) {
-      print("error" + e.toString());
-      Dialogs.showSnackbar(context, '네트워크 확인해보셈');
+      return await APIs.auth.signInWithCredential(credential);
+    } catch (e) {
+      print('message : $e');
+      Dialogs.showSnackbar(context, "네트워크 확인후 관리자 문의");
       return null;
     }
   }
-
-  _signOut() async {
-    await FirebaseAuth.instance.signOut();
-    await GoogleSignIn().signOut();
-  }
-
 
   @override
   Widget build(BuildContext context) {
     mq = MediaQuery.of(context).size;
 
     return Scaffold(
-      // AppBar
       appBar: AppBar(
-        centerTitle: true,
-        title: const Text(
-          "WELCOME CHAT",
-        ),
+        title: const Text("Welcome to MODU Chat"),
       ),
-      // Body
       body: Stack(
         children: [
           AnimatedPositioned(
-              duration: Duration(milliseconds: 500),
-              top: mq.height * .15,
-              right: _isAnimated ? mq.width * .25 : -mq.width * 1,
-              width: mq.width * .5,
+              duration: const Duration(seconds: 1),
+              top: mq.height * 0.15,
+              right: _isAnimate ? mq.width * 0.25 : mq.width * -0.5,
+              width: mq.width * 0.5,
               child: Image.asset('images/icon.png')),
           Positioned(
-              bottom: mq.height * .15,
-              left: mq.width * .05,
-              width: mq.width * .9,
-              height: mq.height * .06,
+              left: mq.width * 0.05,
+              bottom: mq.height * 0.15,
+              width: mq.width * 0.9,
+              height: mq.height * 0.07,
               child: ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 223, 255, 187),
-                    shape: StadiumBorder(),
-                    elevation: 1,
+                    backgroundColor: const Color.fromARGB(255, 219, 255, 178),
+                    shape: const StadiumBorder(),
                   ),
                   onPressed: () {
                     _handleGoogleBtnClick();
                   },
-                  icon: Image.asset(
-                    'images/google.png',
-                    height: mq.height * 0.03,
-                  ),
+                  icon: Image.asset('images/google.png'),
                   label: RichText(
                     text: const TextSpan(
                         style: TextStyle(color: Colors.black, fontSize: 16),
                         children: [
-                          TextSpan(text: 'Signin with '),
+                          TextSpan(text: 'Login With '),
                           TextSpan(
-                              text: 'Google',
-                              style: TextStyle(fontWeight: FontWeight.w700))
+                              text: 'GOOGLE',
+                              style: TextStyle(fontWeight: FontWeight.w500))
                         ]),
-                  ))),
+                  )))
         ],
       ),
     );

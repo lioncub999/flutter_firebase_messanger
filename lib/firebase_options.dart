@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -46,15 +49,6 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAQGpDZYY6mlhhF-kYQt4UW9gq4mrjVrms',
-    appId: '1:483669063544:web:987555626c947b465c7a8d',
-    messagingSenderId: '483669063544',
-    projectId: 'wechat-703d0',
-    authDomain: 'wechat-703d0.firebaseapp.com',
-    storageBucket: 'wechat-703d0.appspot.com',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDx6zauinM9VDLXTrw6CpnGYrx5k68d3Mw',
     appId: '1:483669063544:android:4c453f77480ee1945c7a8d',
@@ -65,10 +59,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyA9Tt1Uy9NDjQHDsIbKOjpoDKoysx68NeI',
-    appId: '1:483669063544:ios:681cc0bf287f34ff5c7a8d',
+    appId: '1:483669063544:ios:f55c551778f0f5ee5c7a8d',
     messagingSenderId: '483669063544',
     projectId: 'wechat-703d0',
     storageBucket: 'wechat-703d0.appspot.com',
-    iosBundleId: 'com.example.moduMessanger',
+    iosClientId: '483669063544-6kp24imn43qsv5i9i3s34da74s5jct8e.apps.googleusercontent.com',
+    iosBundleId: 'com.example.moduMessengerFirebase',
   );
 }

@@ -1,8 +1,10 @@
-import 'package:flutter/cupertino.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:modu_messanger/screens/auth/login_screen.dart';
+import 'package:modu_messenger_firebase/api/apis.dart';
+import 'package:modu_messenger_firebase/screens/home_screen.dart';
 
 import '../../main.dart';
+import 'auth/login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -16,45 +18,32 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(Duration(milliseconds: 1500), (){
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (_) => const LoginScreen()));
+    Future.delayed(const Duration(milliseconds: 1500), () {
+      if (APIs.auth.currentUser != null) {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (_) => HomeScreen()));
+      } else {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (_) => LoginScreen()));
+      }
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
     mq = MediaQuery.of(context).size;
 
     return Scaffold(
-      // AppBar
       appBar: AppBar(
-        centerTitle: true,
-        title: const Text(
-          "WELCOME CHAT",
-        ),
+        title: const Text("Welcome to MODU Chat"),
       ),
-      // Body
       body: Stack(
         children: [
           Positioned(
-              top: mq.height * .15,
-              right: mq.width * .25,
-              width: mq.width * .5,
+              top: mq.height * 0.15,
+              right: mq.width * 0.25,
+              width: mq.width * 0.5,
               child: Image.asset('images/icon.png')),
-          Positioned(
-              bottom: mq.height * .15,
-              width: mq.width,
-              child: const Text('MADE IN KOREA WITH SMURF',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 16,
-                color : Colors.black87,
-                letterSpacing: .7
-              ),)),
         ],
       ),
     );

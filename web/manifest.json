@@ -1,6 +1,6 @@
 {
-    "name": "modu_messanger",
-    "short_name": "modu_messanger",
+    "name": "modu_messenger_firebase",
+    "short_name": "modu_messenger_firebase",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

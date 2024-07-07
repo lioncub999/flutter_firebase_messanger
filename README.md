@@ -1,4 +1,4 @@
-# modu_messanger
+# modu_messenger_firebase
 
 A new Flutter project.
 
