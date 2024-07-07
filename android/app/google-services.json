@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "483669063544",
+    "project_id": "wechat-703d0",
+    "storage_bucket": "wechat-703d0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:483669063544:android:4c453f77480ee1945c7a8d",
+        "android_client_info": {
+          "package_name": "com.example.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "483669063544-teh1vea55ohnir4l2uaadpg4306ok2oh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDx6zauinM9VDLXTrw6CpnGYrx5k68d3Mw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "483669063544-teh1vea55ohnir4l2uaadpg4306ok2oh.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "483669063544-k3r5192ubhs0o4m37csvatpo64hissdq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.moduMessanger"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
