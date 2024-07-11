@@ -29,11 +29,23 @@ class _LoginScreenState extends State<LoginScreen> {
 
   _handleGoogleBtnClick() {
     Dialogs.showProgressBar(context);
-    _signInWithGoogle().then((user) {
+
+    _signInWithGoogle().then((user) async {
       Navigator.pop(context);
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (_) => const HomeScreen()));
-      Dialogs.showSnackbar(context, '로그인 되었습니다');
+
+      if (user != null) {
+        if ((await APIs.userExists())) {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (_) => const HomeScreen()));
+          Dialogs.showSnackbar(context, '로그인 되었습니다');
+        } else {
+          APIs.createUser().then((value) {
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (_) => const HomeScreen()));
+            Dialogs.showSnackbar(context, '로그인 되었습니다');
+          });
+        }
+      }
     });
   }
 
@@ -68,6 +80,8 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Welcome to MODU Chat"),
+        leading: Container(),
+
       ),
       body: Stack(
         children: [
