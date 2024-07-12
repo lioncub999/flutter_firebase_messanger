@@ -12,6 +12,8 @@ class Dialogs {
   static void showProgressBar(BuildContext context) {
     showDialog(
         context: context,
+        barrierDismissible: false,
+        barrierColor: Colors.black54,
         builder: (_) => Center(
               child: CircularProgressIndicator(),
             ));

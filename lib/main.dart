@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:modu_messenger_firebase/screens/auth/login_screen.dart';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -12,6 +13,15 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   _initializeFirebase();
   runApp(MaterialApp(
+    localizationsDelegates: const [
+      GlobalMaterialLocalizations.delegate,
+      GlobalWidgetsLocalizations.delegate,
+      GlobalCupertinoLocalizations.delegate,
+    ],
+    supportedLocales: const [
+      Locale('en', ''),
+      Locale('ko', ''),
+    ],
     theme: ThemeData(
         appBarTheme: const AppBarTheme(
             centerTitle: true,

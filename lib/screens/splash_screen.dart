@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:modu_messenger_firebase/api/apis.dart';
 import 'package:modu_messenger_firebase/screens/home_screen.dart';
 
@@ -19,6 +20,9 @@ class _SplashScreenState extends State<SplashScreen> {
     // TODO: implement initState
     super.initState();
     Future.delayed(const Duration(milliseconds: 1500), () {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(systemNavigationBarColor: Colors.white));
+
       if (APIs.auth.currentUser != null) {
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (_) => HomeScreen()));

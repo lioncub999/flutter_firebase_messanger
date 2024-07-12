@@ -20,65 +20,115 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<ChatUser> list = [];
+  final List<ChatUser> _searchList = [];
+
+  // for storing search
+  bool _isSearching = false;
+
+  @override
+  void initState() {
+    super.initState();
+    APIs.getSelfInfo();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("MODU Chat"),
-        leading: Icon(CupertinoIcons.home),
-        actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.search)),
-          IconButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => ProfileScreen(user: list[0])));
-              },
-              icon: Icon(Icons.more_vert))
-        ],
-      ),
-      floatingActionButton: Padding(
-        padding: EdgeInsets.only(bottom: 10),
-        child: FloatingActionButton(
-          onPressed: () async {
-            await APIs.auth.signOut();
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (_) => const LoginScreen()));
-            Dialogs.showSnackbar(context, '로그아웃 되었습니다');
-          },
-          child: Icon(Icons.add_comment_rounded),
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: _isSearching
+              ? TextField(
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    hintText: 'Name, Email, ...',
+                  ),
+                  autofocus: true,
+                  style: const TextStyle(fontSize: 17, letterSpacing: 0.5),
+                  onChanged: (val) {
+                    _searchList.clear();
+                    for (var i in list) {
+                      if (i.name.toLowerCase().contains(val.toLowerCase()) ||
+                          i.email.toLowerCase().contains(val.toLowerCase())) {
+                        _searchList.add(i);
+                      }
+                    }
+                    setState(() {
+                      _searchList;
+                    });
+                  },
+                )
+              : const Text("MODU Chat"),
+          leading: Icon(CupertinoIcons.home),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  setState(() {
+                    _isSearching = !_isSearching;
+                  });
+                },
+                icon: Icon(_isSearching
+                    ? CupertinoIcons.clear_circled_solid
+                    : Icons.search)),
+            IconButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => ProfileScreen(user: APIs.me)));
+                },
+                icon: Icon(Icons.more_vert))
+          ],
         ),
+        floatingActionButton: Padding(
+          padding: EdgeInsets.only(bottom: 10),
+          child: FloatingActionButton(
+            onPressed: () async {
+              await APIs.auth.signOut();
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (_) => const LoginScreen()));
+              Dialogs.showSnackbar(context, '로그아웃 되었습니다');
+            },
+            child: Icon(Icons.add_comment_rounded),
+          ),
+        ),
+        body: StreamBuilder(
+            stream: APIs.getAllUsers(),
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
+                case ConnectionState.none:
+                  return const Center(child: CircularProgressIndicator());
+
+                case ConnectionState.active:
+                case ConnectionState.done:
+                  final data = snapshot.data?.docs;
+
+                  list = data
+                          ?.map((e) => ChatUser.fromJson(e.data()))
+                          .toList() ??
+                      [];
+
+                  if (list.isNotEmpty) {
+                    return ListView.builder(
+                      itemCount:
+                          _isSearching ? _searchList.length : list.length,
+                      padding: EdgeInsets.only(top: mq.height * 0.01),
+                      itemBuilder: (context, index) {
+                        return ChatUserCard(
+                            user: _isSearching
+                                ? _searchList[index]
+                                : list[index]);
+                      },
+                    );
+                  } else {
+                    return const Center(
+                      child: Text("데이터 없음"),
+                    );
+                  }
+              }
+            }),
       ),
-      body: StreamBuilder(
-          stream: APIs.fireStore.collection('users').snapshots(),
-          builder: (context, snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.waiting:
-              case ConnectionState.none:
-                return const Center(child: CircularProgressIndicator());
-
-              case ConnectionState.active:
-              case ConnectionState.done:
-                final data = snapshot.data?.docs;
-
-                list = data?.map((e) => ChatUser.fromJson(e.data())).toList() ??
-                    [];
-
-                if (list.isNotEmpty) {
-                  return ListView.builder(
-                    itemCount: list.length,
-                    padding: EdgeInsets.only(top: mq.height * 0.01),
-                    itemBuilder: (context, index) {
-                      return ChatUserCard(user: list[index]);
-                    },
-                  );
-                } else {
-                  return Center(
-                    child: Text("데이터 없음"),
-                  );
-                }
-            }
-          }),
     );
   }
 }
