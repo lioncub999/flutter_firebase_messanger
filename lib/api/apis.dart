@@ -68,8 +68,6 @@ class APIs {
 
   // for updating user info
   static Future<void> updateUserInfo() async {
-    print(me.name);
-    print(me.about);
     await fireStore
         .collection('users')
         .doc(user.uid)
@@ -101,24 +99,57 @@ class APIs {
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllMessages(
       ChatUser user) {
     return fireStore
-        .collection('chats/${getConversationId(user.id)}/messages')
+        .collection('chats/${getConversationId(user.id)}/messages/')
+        .orderBy('sent', descending: true)
         .snapshots();
   }
 
   // for sending message
-  static Future<void> sendMessage(ChatUser chatUser, String msg) async {
+  static Future<void> sendMessage(ChatUser chatUser, String msg, Type type) async {
     final time = DateTime.now().millisecondsSinceEpoch.toString();
 
     final Message message = Message(
         told: chatUser.id,
-        type: Type.text,
+        type: type,
         msg: msg,
         read: '',
         fromId: user.uid,
         sent: time);
 
     final ref = fireStore
-        .collection('chats/${getConversationId(chatUser.id)}/messages');
+        .collection('chats/${getConversationId(chatUser.id)}/messages/');
     await ref.doc(time).set(message.toJson());
+  }
+
+  //update read status of message
+  static Future<void> updateMessageReadStatus(Message message) async {
+    fireStore
+        .collection('chats/${getConversationId(message.fromId)}/messages/')
+        .doc(message.sent)
+        .update({'read': DateTime.now().millisecondsSinceEpoch.toString()});
+  }
+
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getLastMessage(
+      ChatUser user) {
+    return fireStore
+        .collection('chats/${getConversationId(user.id)}/messages/')
+        .orderBy('sent', descending: true)
+        .limit(1)
+        .snapshots();
+  }
+
+  // send chat image
+  static Future<void> sendChatImage(ChatUser chatUser, File file) async {
+    final ext = file.path.split('.').last;
+    final ref = storage.ref().child(
+        'images/${getConversationId(chatUser.id)}/${DateTime.now().millisecondsSinceEpoch}.$ext');
+    await ref
+        .putFile(file, SettableMetadata(contentType: 'image/$ext'))
+        .then((p0) {
+      print('Data Transferred : ${p0.bytesTransferred / 10000} kb');
+    });
+    final imgUrl = await ref.getDownloadURL();
+
+    await APIs.sendMessage(chatUser, imgUrl, Type.image);
   }
 }

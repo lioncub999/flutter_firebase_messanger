@@ -63,9 +63,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
       Dialogs.showProgressBar(context);
       await APIs.updateProfilePicture(File(_image!.path));
+      Navigator.pop(context);
+      Navigator.pop(context);
     }
-    Navigator.pop(context);
-    Navigator.pop(context);
   }
 
   // TODO: 사진 접근 권한 허용 알림
@@ -104,10 +104,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (status.isGranted) {
       final pickedFile = await _picker.pickImage(source: ImageSource.camera);
       if (pickedFile != null) {
+        Dialogs.showProgressBar(context);
         // 파일을 선택한 경우
         setState(() {
           _image = pickedFile;
         });
+        await APIs.updateProfilePicture(File(_image!.path));
       }
       Navigator.pop(context);
     } else if (status.isDenied) {
@@ -119,37 +121,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text("Profile Screen"),
-        ),
-        floatingActionButton: Padding(
-          padding: EdgeInsets.only(bottom: 10),
-          child: FloatingActionButton.extended(
-              backgroundColor: Colors.redAccent,
-              onPressed: () async {
-                Dialogs.showProgressBar(context);
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Profile Screen"),
+      ),
+      floatingActionButton: Padding(
+        padding: EdgeInsets.only(bottom: 10),
+        child: FloatingActionButton.extended(
+            backgroundColor: Colors.redAccent,
+            onPressed: () async {
+              Dialogs.showProgressBar(context);
 
-                await APIs.auth.signOut().then((value) async {
-                  await GoogleSignIn().signOut().then((value) {
-                    Navigator.pop(context);
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (_) => LoginScreen()));
-                  });
+              await APIs.auth.signOut().then((value) async {
+                await GoogleSignIn().signOut().then((value) {
+                  Navigator.pop(context);
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => LoginScreen()));
                 });
-              },
-              icon: const Icon(
-                Icons.add_comment,
-                color: Colors.white,
-              ),
-              label: const Text(
-                "Logout",
-                style: TextStyle(color: Colors.white),
-              )),
-        ),
-        body: Form(
+              });
+            },
+            icon: const Icon(
+              Icons.add_comment,
+              color: Colors.white,
+            ),
+            label: const Text(
+              "Logout",
+              style: TextStyle(color: Colors.white),
+            )),
+      ),
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Form(
           key: _formKey,
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: mq.width * 0.05),
