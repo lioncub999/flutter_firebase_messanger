@@ -68,6 +68,8 @@ class APIs {
 
   // for updating user info
   static Future<void> updateUserInfo() async {
+    print(me.name);
+    print(me.about);
     await fireStore
         .collection('users')
         .doc(user.uid)
