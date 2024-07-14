@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:modu_messenger_firebase/helper/my_date_util.dart';
+import 'package:modu_messenger_firebase/screens/view_profile_screnn.dart';
 import 'package:modu_messenger_firebase/widgets/message_card.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -141,42 +143,7 @@ class _ChatScreenState extends State<ChatScreen> {
       backgroundColor: const Color.fromARGB(255, 234, 248, 255),
       appBar: AppBar(
         centerTitle: false,
-        title: Row(children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(mq.width * .3),
-            child: CachedNetworkImage(
-              width: mq.height * .05,
-              height: mq.height * .05,
-              fit: BoxFit.cover,
-              imageUrl: widget.user.image,
-              placeholder: (context, url) => CircularProgressIndicator(),
-              errorWidget: (context, url, error) => Icon(Icons.error),
-            ),
-          ),
-          const SizedBox(
-            width: 10,
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                widget.user.name,
-                style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.black87,
-                    fontWeight: FontWeight.w900),
-              ),
-              const SizedBox(
-                height: 2,
-              ),
-              const Text(
-                'Last seen not available',
-                style: TextStyle(fontSize: 13, color: Colors.black38),
-              )
-            ],
-          )
-        ]),
+        title: _appBar(),
       ),
       body: GestureDetector(
         behavior: HitTestBehavior.opaque,
@@ -237,6 +204,68 @@ class _ChatScreenState extends State<ChatScreen> {
             _chatInput()
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _appBar() {
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (_) => ViewProfileScreen(user: widget.user)));
+      },
+      child: StreamBuilder(
+        stream: APIs.getUserInfo(widget.user),
+        builder: (context, snapshot) {
+          final data = snapshot.data?.docs;
+          final list =
+              data?.map((e) => ChatUser.fromJson(e.data())).toList() ?? [];
+
+          return Row(children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(mq.width * .3),
+              child: CachedNetworkImage(
+                width: mq.height * .05,
+                height: mq.height * .05,
+                fit: BoxFit.cover,
+                imageUrl: list.isNotEmpty ? list[0].image : widget.user.image,
+                placeholder: (context, url) => CircularProgressIndicator(),
+                errorWidget: (context, url, error) => Icon(Icons.error),
+              ),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  list.isNotEmpty ? list[0].name : widget.user.name,
+                  style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.black87,
+                      fontWeight: FontWeight.w900),
+                ),
+                const SizedBox(
+                  height: 2,
+                ),
+                Text(
+                  list.isNotEmpty
+                      ? list[0].isOnline
+                          ? 'Online'
+                          : MyDateUtil.getLastActiveTime(
+                              context: context, lastActivce: list[0].lastActive)
+                      : MyDateUtil.getLastMessageTime(
+                          context: context, time: widget.user.lastActive),
+                  style: TextStyle(fontSize: 13, color: Colors.black38),
+                )
+              ],
+            ),
+          ]);
+        },
       ),
     );
   }

@@ -2,10 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:modu_messenger_firebase/helper/dialogs.dart';
 import 'package:modu_messenger_firebase/screens/auth/login_screen.dart';
 import 'package:modu_messenger_firebase/screens/profile_screen.dart';
 import 'package:modu_messenger_firebase/widgets/chat_user_card.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../api/apis.dart';
 import '../main.dart';
@@ -29,6 +31,27 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     APIs.getSelfInfo();
+    _requestPhotoPermission();
+
+    SystemChannels.lifecycle.setMessageHandler((message) {
+      if(APIs.auth.currentUser != null) {
+        if(message.toString().contains('paused')) APIs.updateActiveStatus(false);
+        if(message.toString().contains('resume')) APIs.updateActiveStatus(true);
+      }
+      return Future.value(message);
+    });
+  }
+
+  // TODO: 알림 권한 허용
+  Future<void> _requestPhotoPermission() async {
+    var status = await Permission.notification.status;
+    if (!status.isGranted) {
+      status = await Permission.notification.request();
+    }
+    if (status.isGranted) {
+    } else if (status.isDenied) {
+    } else if (status.isPermanentlyDenied) {
+    }
   }
 
   @override

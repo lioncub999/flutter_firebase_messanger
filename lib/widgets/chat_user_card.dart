@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:modu_messenger_firebase/api/apis.dart';
 import 'package:modu_messenger_firebase/helper/my_date_util.dart';
 import 'package:modu_messenger_firebase/models/message.dart';
+import 'package:modu_messenger_firebase/widgets/dialogs/profile_dialog.dart';
 
 import '../main.dart';
 import '../models/chat_user.dart';
@@ -46,16 +47,21 @@ class _ChatUserCardState extends State<ChatUserCard> {
                 }
 
                 return ListTile(
-                  leading: ClipRRect(
-                    borderRadius: BorderRadius.circular(mq.width * .3),
-                    child: CachedNetworkImage(
-                      width: mq.width * .15,
-                      height: mq.width * .15,
-                      fit: BoxFit.cover,
-                      imageUrl: widget.user.image,
-                      placeholder: (context, url) =>
-                          CircularProgressIndicator(),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
+                  leading: InkWell(
+                    onTap: (){
+                      showDialog(context: context, builder: (_) => ProfileDialog(user:widget.user));
+                    },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(mq.width * .3),
+                      child: CachedNetworkImage(
+                        width: mq.width * .15,
+                        height: mq.width * .15,
+                        fit: BoxFit.cover,
+                        imageUrl: widget.user.image,
+                        placeholder: (context, url) =>
+                            CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                      ),
                     ),
                   ),
                   // leading: Image.network(widget.user.image),

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:modu_messenger_firebase/models/chat_user.dart';
 import 'package:modu_messenger_firebase/models/message.dart';
@@ -22,6 +23,21 @@ class APIs {
   // to return current user
   static get user => auth.currentUser!;
 
+  // for accessing firebase messaging (Push Notification)
+  static FirebaseMessaging fMessaging = FirebaseMessaging.instance;
+
+  //for getting firebase messaging token
+  static Future<void> getFirebaseMessagingToken() async{
+    await fMessaging.requestPermission();
+
+    await fMessaging.getToken().then((t) {
+      if (t != null) {
+        print(t);
+        me.pushToken = t;
+      }
+    });
+  }
+
   // for checking if user exist or not?
   static Future<bool> userExists() async {
     return (await fireStore.collection('users').doc(user!.uid).get()).exists;
@@ -29,9 +45,12 @@ class APIs {
 
   // for getting current user info
   static Future<void> getSelfInfo() async {
-    return fireStore.collection('users').doc(user.uid).get().then((user) {
+    return fireStore.collection('users').doc(user.uid).get().then((user) async {
       if (user.exists) {
         me = ChatUser.fromJson(user.data()!);
+        await getFirebaseMessagingToken();
+
+        APIs.updateActiveStatus(true);
       } else {
         createUser().then((value) => getSelfInfo());
       }
@@ -91,6 +110,24 @@ class APIs {
         .update({'image': me.image});
   }
 
+  // for getting specific user info
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getUserInfo(
+      ChatUser chatUser) {
+    return fireStore
+        .collection('users')
+        .where('id', isEqualTo: chatUser.id)
+        .snapshots();
+  }
+
+  //update online or last active status of user
+  static Future<void> updateActiveStatus(bool isOnline) async {
+    fireStore.collection('users').doc(user.uid).update({
+      'is_online': isOnline,
+      'last_active': DateTime.now().millisecondsSinceEpoch.toString(),
+      'push_token' : me.pushToken
+    });
+  }
+
   //**************************************CHAT SCREEN RELATED APIS**************************************//
   static String getConversationId(String id) => user.uid.hashCode <= id.hashCode
       ? '${user.uid}_$id'
@@ -105,7 +142,8 @@ class APIs {
   }
 
   // for sending message
-  static Future<void> sendMessage(ChatUser chatUser, String msg, Type type) async {
+  static Future<void> sendMessage(
+      ChatUser chatUser, String msg, Type type) async {
     final time = DateTime.now().millisecondsSinceEpoch.toString();
 
     final Message message = Message(
