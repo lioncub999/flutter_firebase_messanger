@@ -47,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
               top: mq.height * 0.25,
               right: mq.width * 0.25,
               width: mq.width * 0.5,
-              child: Image.asset('images/icon.png')),
+              child: Image.asset('assets/images/icon.png')),
         ],
       ),
     );

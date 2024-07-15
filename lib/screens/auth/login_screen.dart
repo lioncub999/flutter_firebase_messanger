@@ -156,7 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       _handleLoginBtnClick(); // LoginBtn-ClickEvent
                     },
                     // LoginBtn-Element
-                    icon: Image.asset('images/google.png'),
+                    icon: Image.asset('assets/images/google.png'),
                     label: RichText(
                       text: const TextSpan(
                           style: TextStyle(color: Colors.black, fontSize: 16),
