@@ -18,8 +18,8 @@ class CustomDialogs {
   // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
   // ┃   회전 로딩 화면 표시                                               ┃
   // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
-  static void showProgressBar(BuildContext context) {
-    showDialog(
+  static Future<void> showProgressBar(BuildContext context) async {
+    await showDialog(
         context: context,
         barrierDismissible: false,
         barrierColor: Colors.black54,

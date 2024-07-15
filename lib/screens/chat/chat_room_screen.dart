@@ -1,11 +1,8 @@
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:modu_messenger_firebase/helper/custom_date_util.dart';
 import 'package:modu_messenger_firebase/helper/permission_helper.dart';
-import 'package:modu_messenger_firebase/screens/profile/view_profile_screen.dart';
 import 'package:modu_messenger_firebase/widgets/message_card.dart';
 
 import '../../api/apis.dart';
@@ -27,12 +24,10 @@ class ChatRoomScreen extends StatefulWidget {
 }
 
 class _ChatRoomScreenState extends State<ChatRoomScreen> {
-  final FocusNode _focusNode = FocusNode(); // 포커스 노드 추가
+  final _textController = TextEditingController(); // TextField 컨트롤러
 
   bool _isUploading = false; // 사진 전송시 대화방 로딩중 표시
   List<Message> _messageList = []; // _messageList 초기화
-
-  final _textController = TextEditingController(); // TextField 컨트롤러
 
   XFile? _image; // 이미지를 담을 변수 선언
   final ImagePicker _picker = ImagePicker(); // imagePicker
@@ -41,16 +36,6 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
     setState(() {
       _image = image;
     });
-  }
-
-  // ┏━━━━━━━━━━━━━━━━━━━━━━┓
-  // ┃   포커스 노드 해제   ┃
-  // ┗━━━━━━━━━━━━━━━━━━━━━━┛
-  @override
-  void dispose() {
-    _textController.dispose();
-    _focusNode.dispose();
-    super.dispose();
   }
 
   // ┏━━━━━━━━━━━━━━━━━━━━━━┓
@@ -125,7 +110,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
       body: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () {
-          _focusNode.unfocus(); // 제스처 감지 시 포커스 해제
+          FocusScope.of(context).unfocus(); // 제스처 감지 시 포커스 해제
         },
         // 채팅 내용
         child: Column(
@@ -148,7 +133,8 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                         // ListView.builder 로 채팅 내역 뿌리기
                         if (_messageList.isNotEmpty) {
                           return ListView.builder(
-                            reverse: true, // 채팅 내역 거꾸로
+                            reverse: true,
+                            // 채팅 내역 거꾸로
                             itemCount: _messageList.length,
                             padding: EdgeInsets.only(top: mq.height * 0.01),
                             physics: const BouncingScrollPhysics(),
@@ -156,10 +142,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                               // ┏━━━━━━━━━━━━┓
                               // ┃   말풍선   ┃
                               // ┗━━━━━━━━━━━━┛
-                              return MessageCard(
-                                message: _messageList[index],
-                                user : widget.user
-                              );
+                              return MessageCard(message: _messageList[index], user: widget.user);
                             },
                           );
                         } else {
@@ -267,7 +250,6 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                 ),
                 Expanded(
                     child: TextField(
-                  focusNode: _focusNode,
                   // 포커스 노드 연결
                   controller: _textController,
                   keyboardType: TextInputType.multiline,
