@@ -23,27 +23,27 @@ class BottomNavbar extends StatelessWidget {
           // 토크 아이콘
           BottomNavigationBarItem(
             label: '토크',
-            icon: SvgPicture.asset('assets/icons/talkIcon.svg'),
-            activeIcon: SvgPicture.asset('assets/icons/talkIcon.svg'),
+            icon: SvgPicture.asset('assets/icons/talkIcon.svg', width: 24, height: 24),
+            activeIcon: SvgPicture.asset('assets/icons/talkIcon.svg', width: 24, height: 24),
           ),
           // 내주변 아이콘
           BottomNavigationBarItem(
             label: '내주변',
-            icon: SvgPicture.asset('assets/icons/locationIcon.svg'),
-            activeIcon: SvgPicture.asset('assets/icons/locationIcon.svg'),
+            icon: SvgPicture.asset('assets/icons/locationIcon.svg', width: 24, height: 24),
+            activeIcon: SvgPicture.asset('assets/icons/locationIcon.svg', width: 24, height: 24),
 
           ),
           // 채팅 아이콘
           BottomNavigationBarItem(
             label: '채팅',
-            icon: SvgPicture.asset('assets/icons/chatIcon.svg'),
-            activeIcon: SvgPicture.asset('assets/icons/chatIcon.svg'),
+            icon: SvgPicture.asset('assets/icons/chatIcon.svg', width: 24, height: 24),
+            activeIcon: SvgPicture.asset('assets/icons/chatIcon.svg', width: 24, height: 24),
           ),
           // 더보기 아이콘
           BottomNavigationBarItem(
             label: '더보기',
-            icon: SvgPicture.asset('assets/icons/moreIcon.svg'),
-            activeIcon: SvgPicture.asset('assets/icons/moreIcon.svg'),
+            icon: SvgPicture.asset('assets/icons/moreIcon.svg', width: 24, height: 24),
+            activeIcon: SvgPicture.asset('assets/icons/moreIcon.svg', width: 24, height: 24),
           )
         ]);
   }
