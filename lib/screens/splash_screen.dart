@@ -15,36 +15,33 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  // ┏━━━━━━━━━━━━━━━┓
+  // ┃   initState   ┃
+  // ┗━━━━━━━━━━━━━━━┛
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    // "milliseconds : x초" 후 로그인 화면 이동
     Future.delayed(const Duration(milliseconds: 1500), () {
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(systemNavigationBarColor: Colors.white));
-
       if (APIs.auth.currentUser != null) {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (_) => HomeScreen()));
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (_) => const HomeScreen())); // 로그인된 유저 있으면 HomeScreen 이동
       } else {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (_) => LoginScreen()));
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (_) => const LoginScreen())); // 로그인 안되어있으면 LoginScreen 이동
       }
     });
   }
-
   @override
   Widget build(BuildContext context) {
-    mq = MediaQuery.of(context).size;
-
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Welcome to MODU Chat"),
-      ),
+      // ┏━━━━━━━━┓
+      // ┃  Body  ┃
+      // ┗━━━━━━━━┛
       body: Stack(
         children: [
           Positioned(
-              top: mq.height * 0.15,
+              top: mq.height * 0.25,
               right: mq.width * 0.25,
               width: mq.width * 0.5,
               child: Image.asset('images/icon.png')),

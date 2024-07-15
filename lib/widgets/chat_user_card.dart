@@ -8,7 +8,7 @@ import 'package:modu_messenger_firebase/widgets/dialogs/profile_dialog.dart';
 
 import '../main.dart';
 import '../models/chat_user.dart';
-import '../screens/chat_screen.dart';
+import '../screens/chat/chat_room_screen.dart';
 
 class ChatUserCard extends StatefulWidget {
   const ChatUserCard({super.key, required this.user});
@@ -34,7 +34,7 @@ class _ChatUserCardState extends State<ChatUserCard> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (_) => ChatScreen(user: widget.user)));
+                    builder: (_) => ChatRoomScreen(user: widget.user)));
           },
           child: StreamBuilder(
               stream: APIs.getLastMessage(widget.user),
