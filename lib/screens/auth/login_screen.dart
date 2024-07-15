@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:modu_messenger_firebase/helper/dialogs.dart';
+import 'package:modu_messenger_firebase/helper/custom_dialogs.dart';
 import 'package:modu_messenger_firebase/screens/home_screen.dart';
 
 import '../../api/apis.dart';
@@ -37,7 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
   // ┃   로그인 버튼 클릭   ┃
   // ┗━━━━━━━━━━━━━━━━━━━━━━┛
   _handleLoginBtnClick() {
-    Dialogs.showProgressBar(context); // 로딩 중 화면 표시
+    CustomDialogs.showProgressBar(context); // 로딩 중 화면 표시
 
     _signInWithGoogle().then((user) async {
       Navigator.pop(context); // 백그라운드 로딩 닫기
@@ -45,13 +45,13 @@ class _LoginScreenState extends State<LoginScreen> {
         // db에 로그인 정보 있으면 그냥 로그인
         if ((await APIs.userExists())) {
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const HomeScreen()));
-          Dialogs.showSnackbar(context, '로그인 되었습니다');
+          CustomDialogs.showSnackbar(context, '로그인 되었습니다');
         }
         // db에 로그인 정보 없으면 데이터 create
         else {
           APIs.createUser().then((value) {
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const HomeScreen()));
-            Dialogs.showSnackbar(context, '로그인 되었습니다');
+            CustomDialogs.showSnackbar(context, '로그인 되었습니다');
           });
         }
       }
@@ -77,11 +77,11 @@ class _LoginScreenState extends State<LoginScreen> {
     } catch (e) {
       // 로그인 취소
       if (googleAuth?.accessToken == null) {
-        Dialogs.showSnackbar(context, "로그인 취소됨");
+        CustomDialogs.showSnackbar(context, "로그인 취소됨");
       }
       // 기타 오류
       else {
-        Dialogs.showSnackbar(context, "네트워크 확인후 관리자 문의");
+        CustomDialogs.showSnackbar(context, "네트워크 확인후 관리자 문의");
       }
       return null;
     }

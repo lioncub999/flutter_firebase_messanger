@@ -3,12 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modu_messenger_firebase/api/apis.dart';
 import 'package:modu_messenger_firebase/api/chat_apis.dart';
-import 'package:modu_messenger_firebase/helper/my_date_util.dart';
-import 'package:modu_messenger_firebase/models/message.dart';
+import 'package:modu_messenger_firebase/helper/custom_date_util.dart';
+import 'package:modu_messenger_firebase/models/message_model.dart';
 import 'package:modu_messenger_firebase/widgets/dialogs/profile_dialog.dart';
 
 import '../main.dart';
-import '../models/chat_user.dart';
+import '../models/chat_user_model.dart';
 import '../screens/chat/chat_room_screen.dart';
 
 // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
@@ -95,7 +95,7 @@ class _ChatUserCardState extends State<ChatUserCard> {
                               decoration: BoxDecoration(color: Colors.greenAccent.shade400, borderRadius: BorderRadius.circular(10)),
                             )
                           : Text(
-                              MyDateUtil.getLastMessageTime(context: context, time: _lastMessage!.sent),
+                              CustomDateUtil.getLastMessageTime(context: context, time: _lastMessage!.sent),
                               style: TextStyle(color: Colors.black54),
                             ),
                 );

@@ -6,14 +6,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:modu_messenger_firebase/helper/dialogs.dart';
-import 'package:modu_messenger_firebase/helper/my_date_util.dart';
+import 'package:modu_messenger_firebase/helper/custom_dialogs.dart';
+import 'package:modu_messenger_firebase/helper/custom_date_util.dart';
 import 'package:modu_messenger_firebase/screens/auth/login_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../api/apis.dart';
 import '../main.dart';
-import '../models/chat_user.dart';
+import '../models/chat_user_model.dart';
 
 class ViewProfileScreen extends StatefulWidget {
   const ViewProfileScreen({super.key, required this.user});
@@ -36,14 +36,10 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
         children: [
           const Text(
             'Joined ON :',
-            style: TextStyle(
-                color: Colors.black87,
-                fontWeight: FontWeight.w500,
-                fontSize: 16),
+            style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w500, fontSize: 16),
           ),
           Text(
-            MyDateUtil.getOrgTime(
-                BuildContext: BuildContext, date: widget.user.createdAt),
+            CustomDateUtil.getOrgTime(context: context, date: widget.user.createdAt),
             style: TextStyle(color: Colors.black54, fontSize: 16),
           )
         ],
@@ -68,8 +64,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                         height: mq.height * .2,
                         fit: BoxFit.cover,
                         imageUrl: widget.user.image,
-                        placeholder: (context, url) =>
-                            CircularProgressIndicator(),
+                        placeholder: (context, url) => CircularProgressIndicator(),
                         errorWidget: (context, url, error) => Icon(Icons.error),
                       ),
                     ),
@@ -99,10 +94,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                     children: [
                       const Text(
                         'About :',
-                        style: TextStyle(
-                            color: Colors.black87,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16),
+                        style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w500, fontSize: 16),
                       ),
                       Text(
                         widget.user.about,

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:modu_messenger_firebase/helper/dialogs.dart';
+import 'package:modu_messenger_firebase/helper/custom_dialogs.dart';
 import 'package:modu_messenger_firebase/screens/auth/login_screen.dart';
 import 'package:modu_messenger_firebase/screens/chat/chat_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -74,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 onPressed: () async {
                   await APIs.auth.signOut();
                   Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const LoginScreen()));
-                  Dialogs.showSnackbar(context, '로그아웃 되었습니다(임시)');
+                  CustomDialogs.showSnackbar(context, '로그아웃 되었습니다(임시)');
                 },
                 child: const Text("로그아웃 임시"),
               ),

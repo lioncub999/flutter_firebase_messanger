@@ -1,11 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:modu_messenger_firebase/api/apis.dart';
-import 'package:modu_messenger_firebase/helper/my_date_util.dart';
+import 'package:modu_messenger_firebase/helper/custom_date_util.dart';
 
 import '../api/chat_apis.dart';
 import '../main.dart';
-import '../models/message.dart';
+import '../models/message_model.dart';
 
 class MessageCard extends StatefulWidget {
   const MessageCard({super.key, required this.message});
@@ -69,7 +69,7 @@ class _MessageCardState extends State<MessageCard> {
         Padding(
           padding: EdgeInsets.only(right: mq.width * .04),
           child: Text(
-            MyDateUtil.getFormattedTime(
+            CustomDateUtil.getFormattedTime(
                 context: context, time: widget.message.sent),
             style: TextStyle(fontSize: 13, color: Colors.black54),
           ),
@@ -97,7 +97,7 @@ class _MessageCardState extends State<MessageCard> {
               width: 2,
             ),
             Text(
-              MyDateUtil.getFormattedTime(
+              CustomDateUtil.getFormattedTime(
                   context: context, time: widget.message.sent),
               style: TextStyle(fontSize: 13, color: Colors.black54),
             )

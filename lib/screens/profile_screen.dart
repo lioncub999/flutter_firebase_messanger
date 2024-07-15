@@ -6,13 +6,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:modu_messenger_firebase/helper/dialogs.dart';
+import 'package:modu_messenger_firebase/helper/custom_dialogs.dart';
 import 'package:modu_messenger_firebase/screens/auth/login_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../api/apis.dart';
 import '../main.dart';
-import '../models/chat_user.dart';
+import '../models/chat_user_model.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key, required this.user});
@@ -61,7 +61,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         _image = pickedFile;
       });
 
-      Dialogs.showProgressBar(context);
+      CustomDialogs.showProgressBar(context);
       await APIs.updateProfilePicture(File(_image!.path));
       Navigator.pop(context);
       Navigator.pop(context);
@@ -104,7 +104,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (status.isGranted) {
       final pickedFile = await _picker.pickImage(source: ImageSource.camera);
       if (pickedFile != null) {
-        Dialogs.showProgressBar(context);
+        CustomDialogs.showProgressBar(context);
         // 파일을 선택한 경우
         setState(() {
           _image = pickedFile;
@@ -130,7 +130,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: FloatingActionButton.extended(
             backgroundColor: Colors.redAccent,
             onPressed: () async {
-              Dialogs.showProgressBar(context);
+              CustomDialogs.showProgressBar(context);
 
               await APIs.updateActiveStatus(false);
 
@@ -260,7 +260,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         if (_formKey.currentState!.validate()) {
                           _formKey.currentState!.save();
                           APIs.updateUserInfo().then((value) {
-                            Dialogs.showSnackbar(
+                            CustomDialogs.showSnackbar(
                                 context, 'Profile Updated SuccessFully!');
                           });
                         }

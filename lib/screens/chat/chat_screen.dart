@@ -5,7 +5,7 @@ import 'package:modu_messenger_firebase/widgets/chat_user_card.dart';
 
 import '../../api/apis.dart';
 import '../../main.dart';
-import '../../models/chat_user.dart';
+import '../../models/chat_user_model.dart';
 
 // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 // ┃                                    ChatScreen                                    ┃
