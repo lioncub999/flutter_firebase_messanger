@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modu_messenger_firebase/api/apis.dart';
+import 'package:modu_messenger_firebase/api/chat_apis.dart';
 import 'package:modu_messenger_firebase/helper/my_date_util.dart';
 import 'package:modu_messenger_firebase/models/message.dart';
 import 'package:modu_messenger_firebase/widgets/dialogs/profile_dialog.dart';
@@ -12,7 +13,6 @@ import '../screens/chat/chat_room_screen.dart';
 
 class ChatUserCard extends StatefulWidget {
   const ChatUserCard({super.key, required this.user});
-
   final ChatUser user;
 
   @override
@@ -20,7 +20,7 @@ class ChatUserCard extends StatefulWidget {
 }
 
 class _ChatUserCardState extends State<ChatUserCard> {
-  // last message info (if null --> no message)
+  // 마지막 대화 내용 (null 이면 대화 기록 없음)
   Message? _message;
 
   @override
@@ -37,7 +37,7 @@ class _ChatUserCardState extends State<ChatUserCard> {
                     builder: (_) => ChatRoomScreen(user: widget.user)));
           },
           child: StreamBuilder(
-              stream: APIs.getLastMessage(widget.user),
+              stream: ChatAPIs.getLastMessage(widget.user),
               builder: (context, snapshot) {
                 final data = snapshot.data?.docs;
                 final list =

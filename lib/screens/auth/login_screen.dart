@@ -34,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
   // ┃   로그인 버튼 클릭   ┃
   // ┗━━━━━━━━━━━━━━━━━━━━━━┛
   _handleLoginBtnClick() {
-    Dialogs.showProgressBar(context); // 백그라운드 로딩 중
+    Dialogs.showProgressBar(context); // 로딩 중 화면 표시
 
     _signInWithGoogle().then((user) async {
       Navigator.pop(context); // 백그라운드 로딩 닫기

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:modu_messenger_firebase/api/apis.dart';
 import 'package:modu_messenger_firebase/helper/my_date_util.dart';
 
+import '../api/chat_apis.dart';
 import '../main.dart';
 import '../models/message.dart';
 
@@ -29,7 +30,7 @@ class _MessageCardState extends State<MessageCard> {
   // sender or another user
   Widget _blueMessage() {
     if (widget.message.read.isEmpty) {
-      APIs.updateMessageReadStatus(widget.message);
+      ChatAPIs.updateMessageReadStatus(widget.message);
     }
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

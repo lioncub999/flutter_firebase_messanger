@@ -5,45 +5,59 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:modu_messenger_firebase/models/chat_user.dart';
-import 'package:modu_messenger_firebase/models/message.dart';
 
+// ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+// ┃                                                                                                    ┃
+// ┃                                            기본 API                                                ┃
+// ┃                                                                                                    ┃
+// ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 class APIs {
-  // for authentication
-  static FirebaseAuth auth = FirebaseAuth.instance;
-
-  // for accessing cloud firestore database
-  static FirebaseFirestore fireStore = FirebaseFirestore.instance;
-
-  // for accessing cloud firebase storage
-  static FirebaseStorage storage = FirebaseStorage.instance;
-
-  // for storing self information
+  // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+  // ┃   내 정보 - me                                                      ┃
+  // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
   static late ChatUser me;
 
-  // to return current user
+  // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+  // ┃   현재 접속 유저 - user                                             ┃
+  // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
   static get user => auth.currentUser!;
 
-  // for accessing firebase messaging (Push Notification)
+  // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+  // ┃   FireBase 구글 인증 - auth                                         ┃
+  // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+  static FirebaseAuth auth = FirebaseAuth.instance;
+
+  // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+  // ┃   FireBase FireStore(데이터 베이스) - fireStore                     ┃
+  // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+  static FirebaseFirestore fireStore = FirebaseFirestore.instance;
+
+  // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+  // ┃   FireBase Storage (저장소) - storage                               ┃
+  // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+  static FirebaseStorage storage = FirebaseStorage.instance;
+
+  // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+  // ┃   FireBase Notification (푸시알림) - fMessaging                     ┃
+  // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
   static FirebaseMessaging fMessaging = FirebaseMessaging.instance;
 
-  //for getting firebase messaging token
-  static Future<void> getFirebaseMessagingToken() async{
+  // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+  // ┃   FireBase Messaging Token (메세지 푸시 토큰 -> me.pushToken)       ┃
+  // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+  static Future<void> getFirebaseMessagingToken() async {
     await fMessaging.requestPermission();
-
     await fMessaging.getToken().then((t) {
       if (t != null) {
-        print(t);
         me.pushToken = t;
       }
     });
   }
 
-  // for checking if user exist or not?
-  static Future<bool> userExists() async {
-    return (await fireStore.collection('users').doc(user!.uid).get()).exists;
-  }
-
-  // for getting current user info
+  // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+  // ┃   현재 접속 유저 정보 - 없을시 DB에 새로운 유저 생성                ┃
+  // ┃   HomeScreen 에서 로그인 정보로 DB 조회 후 me <- user               ┃
+  // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
   static Future<void> getSelfInfo() async {
     return fireStore.collection('users').doc(user.uid).get().then((user) async {
       if (user.exists) {
@@ -57,7 +71,31 @@ class APIs {
     });
   }
 
-  //for creating a new user
+  // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+  // ┃   ● 전체 유저 정보 조회 (본인 제외)                                 ┃
+  // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllUsers() {
+    return fireStore.collection('users').where('id', isNotEqualTo: user.uid).snapshots();
+  }
+
+  // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+  // ┃   ● 특정 유저 정보 조회                                             ┃
+  // ┃      - parameterType : ChatUser                                     ┃
+  // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getUserInfo(ChatUser chatUser) {
+    return fireStore.collection('users').where('id', isEqualTo: chatUser.id).snapshots();
+  }
+
+  // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+  // ┃   ● 로그인 정보가 DB에 있는지 확인                                  ┃
+  // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+  static Future<bool> userExists() async {
+    return (await fireStore.collection('users').doc(user!.uid).get()).exists;
+  }
+
+  // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+  // ┃   ● DB에 새로운 유저 생성                                           ┃
+  // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
   static Future<void> createUser() async {
     final time = DateTime.now().millisecondsSinceEpoch.toString();
 
@@ -72,122 +110,36 @@ class APIs {
         pushToken: '',
         email: user!.email.toString());
 
-    return await fireStore
-        .collection('users')
-        .doc(user.uid)
-        .set(chatUser.toJson());
+    return await fireStore.collection('users').doc(user.uid).set(chatUser.toJson());
   }
 
-  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllUsers() {
-    return fireStore
-        .collection('users')
-        .where('id', isNotEqualTo: user.uid)
-        .snapshots();
-  }
-
-  // for updating user info
+  // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+  // ┃   ● 유저 정보 업데이트 (name, about)                                ┃
+  // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
   static Future<void> updateUserInfo() async {
-    await fireStore
-        .collection('users')
-        .doc(user.uid)
-        .update({'name': me.name, 'about': me.about});
+    await fireStore.collection('users').doc(user.uid).update({'name': me.name, 'about': me.about});
   }
 
-  // update profile picture of user
+  // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+  // ┃   ● 유저 프로필 사진 업데이트 (image)                               ┃
+  // ┃      - parameterType : File                                         ┃
+  // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
   static Future<void> updateProfilePicture(File file) async {
     final ext = file.path.split('.').last;
     final ref = storage.ref().child('profile_pictures/${user.uid}.$ext');
-    await ref
-        .putFile(file, SettableMetadata(contentType: 'image/$ext'))
-        .then((p0) {
-      print('Data Transferred : ${p0.bytesTransferred / 10000} kb');
-    });
+    await ref.putFile(file, SettableMetadata(contentType: 'image/$ext')).then((p0) {});
     me.image = await ref.getDownloadURL();
+    await fireStore.collection('users').doc(user.uid).update({'image': me.image});
+  }
 
-    await fireStore
+  // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+  // ┃   ● 내 활동 상태와 마지막 활동 시간 업데이트                        ┃
+  // ┃     - parameterType : bool                                          ┃
+  // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+  static Future<void> updateActiveStatus(bool isOnline) async {
+    fireStore
         .collection('users')
         .doc(user.uid)
-        .update({'image': me.image});
-  }
-
-  // for getting specific user info
-  static Stream<QuerySnapshot<Map<String, dynamic>>> getUserInfo(
-      ChatUser chatUser) {
-    return fireStore
-        .collection('users')
-        .where('id', isEqualTo: chatUser.id)
-        .snapshots();
-  }
-
-  //update online or last active status of user
-  static Future<void> updateActiveStatus(bool isOnline) async {
-    fireStore.collection('users').doc(user.uid).update({
-      'is_online': isOnline,
-      'last_active': DateTime.now().millisecondsSinceEpoch.toString(),
-      'push_token' : me.pushToken
-    });
-  }
-
-  //**************************************CHAT SCREEN RELATED APIS**************************************//
-  static String getConversationId(String id) => user.uid.hashCode <= id.hashCode
-      ? '${user.uid}_$id'
-      : '${id}_${user.uid}';
-
-  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllMessages(
-      ChatUser user) {
-    return fireStore
-        .collection('chats/${getConversationId(user.id)}/messages/')
-        .orderBy('sent', descending: true)
-        .snapshots();
-  }
-
-  // for sending message
-  static Future<void> sendMessage(
-      ChatUser chatUser, String msg, Type type) async {
-    final time = DateTime.now().millisecondsSinceEpoch.toString();
-
-    final Message message = Message(
-        told: chatUser.id,
-        type: type,
-        msg: msg,
-        read: '',
-        fromId: user.uid,
-        sent: time);
-
-    final ref = fireStore
-        .collection('chats/${getConversationId(chatUser.id)}/messages/');
-    await ref.doc(time).set(message.toJson());
-  }
-
-  //update read status of message
-  static Future<void> updateMessageReadStatus(Message message) async {
-    fireStore
-        .collection('chats/${getConversationId(message.fromId)}/messages/')
-        .doc(message.sent)
-        .update({'read': DateTime.now().millisecondsSinceEpoch.toString()});
-  }
-
-  static Stream<QuerySnapshot<Map<String, dynamic>>> getLastMessage(
-      ChatUser user) {
-    return fireStore
-        .collection('chats/${getConversationId(user.id)}/messages/')
-        .orderBy('sent', descending: true)
-        .limit(1)
-        .snapshots();
-  }
-
-  // send chat image
-  static Future<void> sendChatImage(ChatUser chatUser, File file) async {
-    final ext = file.path.split('.').last;
-    final ref = storage.ref().child(
-        'images/${getConversationId(chatUser.id)}/${DateTime.now().millisecondsSinceEpoch}.$ext');
-    await ref
-        .putFile(file, SettableMetadata(contentType: 'image/$ext'))
-        .then((p0) {
-      print('Data Transferred : ${p0.bytesTransferred / 10000} kb');
-    });
-    final imgUrl = await ref.getDownloadURL();
-
-    await APIs.sendMessage(chatUser, imgUrl, Type.image);
+        .update({'is_online': isOnline, 'last_active': DateTime.now().millisecondsSinceEpoch.toString(), 'push_token': me.pushToken});
   }
 }

@@ -10,6 +10,7 @@ import 'package:modu_messenger_firebase/widgets/message_card.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../api/apis.dart';
+import '../../api/chat_apis.dart';
 import '../../helper/dialogs.dart';
 import '../../main.dart';
 import '../../models/chat_user.dart';
@@ -73,7 +74,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
         _isUploading = true;
       });
       for (var i in multiImages) {
-        await APIs.sendChatImage(widget.user, File(i.path));
+        await ChatAPIs.sendChatImage(widget.user, File(i.path));
       }
       setState(() {
         _isUploading = false;
@@ -125,7 +126,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
         setState(() {
           _isUploading = true;
         });
-        await APIs.sendChatImage(widget.user, File(_image!.path));
+        await ChatAPIs.sendChatImage(widget.user, File(_image!.path));
         setState(() {
           _isUploading = false;
         });
@@ -154,7 +155,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
           children: [
             Expanded(
               child: StreamBuilder(
-                  stream: APIs.getAllMessages(widget.user),
+                  stream: ChatAPIs.getAllMessages(widget.user),
                   builder: (context, snapshot) {
                     switch (snapshot.connectionState) {
                       case ConnectionState.waiting:
@@ -323,7 +324,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
             shape: CircleBorder(),
             onPressed: () {
               if (_textController.text.isNotEmpty) {
-                APIs.sendMessage(widget.user, _textController.text, Type.text);
+                ChatAPIs.sendMessage(widget.user, _textController.text, Type.text);
                 _textController.text = '';
               }
             },
