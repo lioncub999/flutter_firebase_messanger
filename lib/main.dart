@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:firebase_core/firebase_core.dart';
-import 'package:modu_messenger_firebase/screens/splash_screen.dart';
+import 'package:modu_messenger_firebase/screens/common/splash_screen.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 

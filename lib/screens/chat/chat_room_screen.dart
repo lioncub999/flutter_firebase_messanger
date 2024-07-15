@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:modu_messenger_firebase/helper/custom_date_util.dart';
 import 'package:modu_messenger_firebase/helper/permission_helper.dart';
-import 'package:modu_messenger_firebase/screens/view_profile_screen.dart';
+import 'package:modu_messenger_firebase/screens/profile/view_profile_screen.dart';
 import 'package:modu_messenger_firebase/widgets/message_card.dart';
 
 import '../../api/apis.dart';
@@ -158,6 +158,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                               // ┗━━━━━━━━━━━━┛
                               return MessageCard(
                                 message: _messageList[index],
+                                user : widget.user
                               );
                             },
                           );
@@ -261,10 +262,8 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                 borderRadius: BorderRadius.circular(15),
               ),
               child: Row(children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.emoji_emotions),
-                  color: Colors.blueAccent,
+                SizedBox(
+                  width: mq.width * .05,
                 ),
                 Expanded(
                     child: TextField(
@@ -274,7 +273,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                   keyboardType: TextInputType.multiline,
                   minLines: 1,
                   maxLines: 6,
-                  decoration: const InputDecoration(hintText: '채팅을 입력해 보세요', hintStyle: TextStyle(color: Colors.blueAccent), border: InputBorder.none),
+                  decoration: const InputDecoration(hintText: '채팅을 입력하세요', hintStyle: TextStyle(color: Colors.blueAccent), border: InputBorder.none),
                 )),
                 IconButton(
                   onPressed: () {

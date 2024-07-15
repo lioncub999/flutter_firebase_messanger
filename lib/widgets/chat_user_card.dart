@@ -1,5 +1,6 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modu_messenger_firebase/api/apis.dart';
 import 'package:modu_messenger_firebase/api/chat_apis.dart';
@@ -16,6 +17,7 @@ import '../screens/chat/chat_room_screen.dart';
 // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 class ChatUserCard extends StatefulWidget {
   const ChatUserCard({super.key, required this.user});
+
   final ChatUser user;
 
   @override

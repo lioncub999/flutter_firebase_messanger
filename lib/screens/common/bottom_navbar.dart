@@ -20,26 +20,34 @@ class BottomNavbar extends StatelessWidget {
           context.read<MainStore>().setTapState(i);
         },
         items: [
-          // 토크 아이콘
+          // ┏━━━━━━━━━━━━━━━━━┓
+          // ┃   토크 아이콘   ┃
+          // ┗━━━━━━━━━━━━━━━━━┛
           BottomNavigationBarItem(
             label: '토크',
             icon: SvgPicture.asset('assets/icons/talkIcon.svg', width: 24, height: 24),
             activeIcon: SvgPicture.asset('assets/icons/talkIcon.svg', width: 24, height: 24),
           ),
-          // 내주변 아이콘
+          // ┏━━━━━━━━━━━━━━━━━━━┓
+          // ┃   내주변 아이콘   ┃
+          // ┗━━━━━━━━━━━━━━━━━━━┛
           BottomNavigationBarItem(
             label: '내주변',
             icon: SvgPicture.asset('assets/icons/locationIcon.svg', width: 24, height: 24),
             activeIcon: SvgPicture.asset('assets/icons/locationIcon.svg', width: 24, height: 24),
 
           ),
-          // 채팅 아이콘
+          // ┏━━━━━━━━━━━━━━━━━┓
+          // ┃   채팅 아이콘   ┃
+          // ┗━━━━━━━━━━━━━━━━━┛
           BottomNavigationBarItem(
             label: '채팅',
             icon: SvgPicture.asset('assets/icons/chatIcon.svg', width: 24, height: 24),
             activeIcon: SvgPicture.asset('assets/icons/chatIcon.svg', width: 24, height: 24),
           ),
-          // 더보기 아이콘
+          // ┏━━━━━━━━━━━━━━━━━━━┓
+          // ┃   더보기 아이콘   ┃
+          // ┗━━━━━━━━━━━━━━━━━━━┛
           BottomNavigationBarItem(
             label: '더보기',
             icon: SvgPicture.asset('assets/icons/moreIcon.svg', width: 24, height: 24),

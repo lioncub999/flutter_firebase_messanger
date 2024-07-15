@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:modu_messenger_firebase/screens/profile_screen.dart';
+import 'package:modu_messenger_firebase/screens/profile/profile_screen.dart';
 import 'package:modu_messenger_firebase/widgets/chat_user_card.dart';
 
 import '../../api/apis.dart';
@@ -20,6 +20,7 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   // _ChatList 초기화
   List<ChatUser> _ChatList = [];
+
   // _searchCatList 초기화
   final List<ChatUser> _searchChatList = [];
 
@@ -67,6 +68,13 @@ class _ChatScreenState extends State<ChatScreen> {
               )
             // 검색 비활성화 TextField none
             : const Text("쪽지"),
+        // Appbar - actions
+        leading: TextButton(
+            onPressed: () {},
+            child: const Text(
+              "편집",
+              style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+            )),
         // Appbar - actions
         actions: [
           // Appbar - actions - 검색 버튼

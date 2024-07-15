@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:modu_messenger_firebase/screens/view_profile_screen.dart';
+import 'package:modu_messenger_firebase/screens/profile/view_profile_screen.dart';
 
 import '../../main.dart';
 import '../../models/chat_user_model.dart';

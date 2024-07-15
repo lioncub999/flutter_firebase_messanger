@@ -10,9 +10,9 @@ import 'package:modu_messenger_firebase/helper/custom_dialogs.dart';
 import 'package:modu_messenger_firebase/screens/auth/login_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../api/apis.dart';
-import '../main.dart';
-import '../models/chat_user_model.dart';
+import '../../api/apis.dart';
+import '../../main.dart';
+import '../../models/chat_user_model.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key, required this.user});

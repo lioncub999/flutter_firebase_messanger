@@ -4,8 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:modu_messenger_firebase/api/apis.dart';
 import 'package:modu_messenger_firebase/screens/home_screen.dart';
 
-import '../../main.dart';
-import 'auth/login_screen.dart';
+import '../../../main.dart';
+import '../auth/login_screen.dart';
 
 // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 // ┃                                  SplashScreen                                    ┃
