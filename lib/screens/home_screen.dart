@@ -12,6 +12,9 @@ import '../api/apis.dart';
 import '../main.dart';
 import 'common/bottom_navbar.dart';
 
+// ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+// ┃                                    HomeScreen                                    ┃
+// ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 

@@ -72,9 +72,9 @@ flutter:
 
   assets :
     - assets/icons/talkIcon.svg
-    - assets/icons/location.svg
-    - assets/icons/chat.svg
-    - assets/icons/more.svg
+    - assets/icons/locationIcon.svg
+    - assets/icons/chatIcon.svg
+    - assets/icons/moreIcon.svg
   fonts :
     - family: NotoSansKR
       fonts :

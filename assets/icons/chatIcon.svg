@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30" height="21" viewBox="0 0 30 21">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="사각형_31" data-name="사각형 31" width="20.138" height="14.932" transform="translate(0 0)" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="그룹_25099" data-name="그룹 25099" transform="translate(-716 -26)">
+    <g id="그룹_58" data-name="그룹 58" transform="translate(720.931 29.034)">
+      <g id="그룹_57" data-name="그룹 57" clip-path="url(#clip-path)">
+        <path id="패스_44" data-name="패스 44" d="M10.069,1H2.288A1.288,1.288,0,0,0,1,2.288v7.781a3.863,3.863,0,0,0,3.864,3.863h10.41a3.863,3.863,0,0,0,3.864-3.863V2.288A1.288,1.288,0,0,0,17.85,1Z" fill="none" stroke="#d6d6d6" stroke-width="2"/>
+        <line id="선_36" data-name="선 36" x2="8.576" y2="6.627" transform="translate(1.492 1.282)" fill="none" stroke="#d6d6d6" stroke-linecap="round" stroke-width="2"/>
+        <line id="선_37" data-name="선 37" x1="8.582" y2="6.627" transform="translate(10.068 1.282)" fill="none" stroke="#d6d6d6" stroke-linecap="round" stroke-width="2"/>
+      </g>
+    </g>
+    <rect id="사각형_26735" data-name="사각형 26735" width="30" height="21" transform="translate(716 26)" fill="none"/>
+  </g>
+</svg>

@@ -6,8 +6,10 @@ import 'package:modu_messenger_firebase/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
-// Global Size Management (Media Query)
-late Size mq;
+// ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+// ┃                                    Main.dart                                     ┃
+// ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+late Size mq; // Global Size Management (Media Query)
 
 // Initialize-Firebase (firebase 초기화)
 _initializeFirebase() async {
@@ -54,8 +56,7 @@ void main() {
             backgroundColor: Color.fromRGBO(92, 97, 103, 1),
             selectedItemColor: Colors.white,
             unselectedItemColor: Colors.white,
-            showSelectedLabels: true,
-            // 선택 요소 라벨 보이기
+            showSelectedLabels: true, // 선택 요소 라벨 보이기
             showUnselectedLabels: false, // 미선택 요소 라벨 가리기
           )),
       home: const MyApp(),
@@ -74,7 +75,6 @@ class MyApp extends StatefulWidget {
 class MainStore extends ChangeNotifier {
   // Tab State
   int tapState = 0;
-
   setTapState(tap) {
     tapState = tap;
     notifyListeners();

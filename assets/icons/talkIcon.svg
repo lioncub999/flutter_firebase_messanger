@@ -1,13 +1,18 @@
-<svg id="그룹_65" data-name="그룹 65" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18.858" height="15.466" viewBox="0 0 18.858 15.466">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30" height="21" viewBox="0 0 30 21">
   <defs>
     <clipPath id="clip-path">
       <rect id="사각형_35" data-name="사각형 35" width="18.858" height="15.466" transform="translate(0 0)" fill="none"/>
     </clipPath>
   </defs>
-  <g id="그룹_64" data-name="그룹 64" clip-path="url(#clip-path)">
-    <path id="패스_51" data-name="패스 51" d="M15.706,11.337a5.489,5.489,0,0,0,2.4-4.32C18.108,3.556,14.223.75,9.429.75S.75,3.556.75,7.017s3.886,6.266,8.679,6.266a11.61,11.61,0,0,0,3.157-.434v0a5.6,5.6,0,0,0,4.107,1.865.191.191,0,0,0,.157-.309,5.119,5.119,0,0,1-1.142-3.068Z" fill="none" stroke="#d6d6d6" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-    <path id="패스_52" data-name="패스 52" d="M5.966,7.017A1.161,1.161,0,1,1,4.8,5.856,1.161,1.161,0,0,1,5.966,7.017" fill="#d6d6d6"/>
-    <path id="패스_53" data-name="패스 53" d="M10.59,7.017A1.161,1.161,0,1,1,9.429,5.856,1.161,1.161,0,0,1,10.59,7.017" fill="#d6d6d6"/>
-    <path id="패스_54" data-name="패스 54" d="M15.214,7.017a1.161,1.161,0,1,1-1.161-1.161,1.161,1.161,0,0,1,1.161,1.161" fill="#d6d6d6"/>
+  <g id="그룹_25103" data-name="그룹 25103" transform="translate(-252 -94)">
+    <g id="그룹_65" data-name="그룹 65" transform="translate(257.571 96.767)">
+      <g id="그룹_64" data-name="그룹 64" clip-path="url(#clip-path)">
+        <path id="패스_51" data-name="패스 51" d="M15.706,11.337a5.489,5.489,0,0,0,2.4-4.32C18.108,3.556,14.223.75,9.429.75S.75,3.556.75,7.017s3.886,6.266,8.679,6.266a11.61,11.61,0,0,0,3.157-.434v0a5.6,5.6,0,0,0,4.107,1.865.191.191,0,0,0,.157-.309,5.119,5.119,0,0,1-1.142-3.068Z" fill="none" stroke="#d6d6d6" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+        <path id="패스_52" data-name="패스 52" d="M5.966,7.017A1.161,1.161,0,1,1,4.8,5.856,1.161,1.161,0,0,1,5.966,7.017" fill="#d6d6d6"/>
+        <path id="패스_53" data-name="패스 53" d="M10.59,7.017A1.161,1.161,0,1,1,9.429,5.856,1.161,1.161,0,0,1,10.59,7.017" fill="#d6d6d6"/>
+        <path id="패스_54" data-name="패스 54" d="M15.214,7.017a1.161,1.161,0,1,1-1.161-1.161,1.161,1.161,0,0,1,1.161,1.161" fill="#d6d6d6"/>
+      </g>
+    </g>
+    <rect id="사각형_26740" data-name="사각형 26740" width="30" height="21" transform="translate(252 94)" fill="none"/>
   </g>
 </svg>

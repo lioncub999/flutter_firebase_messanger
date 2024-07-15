@@ -7,6 +7,9 @@ import 'package:modu_messenger_firebase/screens/home_screen.dart';
 import '../../main.dart';
 import 'auth/login_screen.dart';
 
+// ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+// ┃                                  SplashScreen                                    ┃
+// ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 

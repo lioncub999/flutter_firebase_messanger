@@ -16,6 +16,9 @@ import '../../main.dart';
 import '../../models/chat_user.dart';
 import '../../models/message.dart';
 
+// ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+// ┃                                  ChatRoomScreen                                  ┃
+// ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 class ChatRoomScreen extends StatefulWidget {
   const ChatRoomScreen({super.key, required this.user});
 
@@ -26,14 +29,15 @@ class ChatRoomScreen extends StatefulWidget {
 }
 
 class _ChatRoomScreenState extends State<ChatRoomScreen> {
-  bool _isUploading = false;
-  List<Message> _list = [];
-  final _textController = TextEditingController();
-
   final FocusNode _focusNode = FocusNode(); // 포커스 노드 추가
 
+  bool _isUploading = false; // 사진 전송시 대화방 로딩중 표시
+  List<Message> _messageList = []; // _messageList 초기화
+
+  final _textController = TextEditingController(); // TextField 컨트롤러
+
   XFile? _image; // 이미지를 담을 변수 선언
-  final ImagePicker _picker = ImagePicker();
+  final ImagePicker _picker = ImagePicker(); // imagePicker
 
   setXfile(image) {
     setState(() {
@@ -166,20 +170,17 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                       case ConnectionState.done:
                         final data = snapshot.data?.docs;
 
-                        _list = data
-                                ?.map((e) => Message.fromJson(e.data()))
-                                .toList() ??
-                            [];
+                        _messageList = data?.map((e) => Message.fromJson(e.data())).toList() ?? [];
 
-                        if (_list.isNotEmpty) {
+                        if (_messageList.isNotEmpty) {
                           return ListView.builder(
                             reverse: true,
-                            itemCount: _list.length,
+                            itemCount: _messageList.length,
                             padding: EdgeInsets.only(top: mq.height * 0.01),
                             physics: const BouncingScrollPhysics(),
                             itemBuilder: (context, index) {
                               return MessageCard(
-                                message: _list[index],
+                                message: _messageList[index],
                               );
                             },
                           );
@@ -212,17 +213,13 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
   Widget _appBar() {
     return InkWell(
       onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (_) => ViewProfileScreen(user: widget.user)));
+        Navigator.push(context, MaterialPageRoute(builder: (_) => ViewProfileScreen(user: widget.user)));
       },
       child: StreamBuilder(
         stream: APIs.getUserInfo(widget.user),
         builder: (context, snapshot) {
           final data = snapshot.data?.docs;
-          final list =
-              data?.map((e) => ChatUser.fromJson(e.data())).toList() ?? [];
+          final list = data?.map((e) => ChatUser.fromJson(e.data())).toList() ?? [];
 
           return Row(children: [
             ClipRRect(
@@ -245,10 +242,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
               children: [
                 Text(
                   list.isNotEmpty ? list[0].name : widget.user.name,
-                  style: const TextStyle(
-                      fontSize: 16,
-                      color: Colors.black87,
-                      fontWeight: FontWeight.w900),
+                  style: const TextStyle(fontSize: 16, color: Colors.black87, fontWeight: FontWeight.w900),
                 ),
                 const SizedBox(
                   height: 2,
@@ -257,10 +251,8 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                   list.isNotEmpty
                       ? list[0].isOnline
                           ? 'Online'
-                          : MyDateUtil.getLastActiveTime(
-                              context: context, lastActivce: list[0].lastActive)
-                      : MyDateUtil.getLastMessageTime(
-                          context: context, time: widget.user.lastActive),
+                          : MyDateUtil.getLastActiveTime(context: context, lastActivce: list[0].lastActive)
+                      : MyDateUtil.getLastMessageTime(context: context, time: widget.user.lastActive),
                   style: TextStyle(fontSize: 13, color: Colors.black38),
                 )
               ],
@@ -273,8 +265,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
 
   Widget _chatInput() {
     return Padding(
-      padding: EdgeInsets.symmetric(
-          vertical: mq.height * .02, horizontal: mq.width * .025),
+      padding: EdgeInsets.symmetric(vertical: mq.height * .02, horizontal: mq.width * .025),
       child: Row(
         children: [
           Expanded(
@@ -296,10 +287,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                   keyboardType: TextInputType.multiline,
                   minLines: 1,
                   maxLines: 6,
-                  decoration: InputDecoration(
-                      hintText: 'Type Someting...',
-                      hintStyle: TextStyle(color: Colors.blueAccent),
-                      border: InputBorder.none),
+                  decoration: InputDecoration(hintText: 'Type Someting...', hintStyle: TextStyle(color: Colors.blueAccent), border: InputBorder.none),
                 )),
                 IconButton(
                   onPressed: () {

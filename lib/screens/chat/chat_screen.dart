@@ -7,6 +7,9 @@ import '../../api/apis.dart';
 import '../../main.dart';
 import '../../models/chat_user.dart';
 
+// ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+// ┃                                    ChatScreen                                    ┃
+// ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
 

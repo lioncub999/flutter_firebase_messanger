@@ -4,9 +4,9 @@ import 'package:provider/provider.dart';
 
 import '../../main.dart';
 
-// ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-// ┃   BottomNavigationBar 공통   ┃
-// ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+// ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+// ┃                             BottomNavigationBar 공통                             ┃
+// ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 class BottomNavbar extends StatelessWidget {
   const BottomNavbar({super.key});
 
@@ -23,27 +23,27 @@ class BottomNavbar extends StatelessWidget {
           // 토크 아이콘
           BottomNavigationBarItem(
             label: '토크',
-            icon: SvgPicture.asset('assets/icons/talkIcon.svg', width: 24, height: 24),
-            activeIcon: SvgPicture.asset('assets/icons/talkIcon.svg', width: 24, height: 24),
+            icon: SvgPicture.asset('assets/icons/talkIcon.svg'),
+            activeIcon: SvgPicture.asset('assets/icons/talkIcon.svg'),
           ),
           // 내주변 아이콘
           BottomNavigationBarItem(
             label: '내주변',
-            icon: SvgPicture.asset('assets/icons/location.svg', width: 24, height: 24),
-            activeIcon: SvgPicture.asset('assets/icons/location.svg', width: 24, height: 24),
+            icon: SvgPicture.asset('assets/icons/locationIcon.svg'),
+            activeIcon: SvgPicture.asset('assets/icons/locationIcon.svg'),
 
           ),
           // 채팅 아이콘
           BottomNavigationBarItem(
             label: '채팅',
-            icon: SvgPicture.asset('assets/icons/chat.svg', width: 20, height: 20),
-            activeIcon: SvgPicture.asset('assets/icons/chat.svg', width: 20, height: 20),
+            icon: SvgPicture.asset('assets/icons/chatIcon.svg'),
+            activeIcon: SvgPicture.asset('assets/icons/chatIcon.svg'),
           ),
           // 더보기 아이콘
           BottomNavigationBarItem(
             label: '더보기',
-            icon: SvgPicture.asset('assets/icons/more.svg', width: 24),
-            activeIcon: SvgPicture.asset('assets/icons/more.svg', width: 24),
+            icon: SvgPicture.asset('assets/icons/moreIcon.svg'),
+            activeIcon: SvgPicture.asset('assets/icons/moreIcon.svg'),
           )
         ]);
   }

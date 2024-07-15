@@ -7,6 +7,9 @@ import 'package:modu_messenger_firebase/screens/home_screen.dart';
 import '../../api/apis.dart';
 import '../../main.dart';
 
+// ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+// ┃                                   LoginScreen                                    ┃
+// ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
