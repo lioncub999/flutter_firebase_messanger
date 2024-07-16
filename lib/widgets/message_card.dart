@@ -45,10 +45,12 @@ class _MessageCardState extends State<MessageCard> {
         SizedBox(
           width: mq.width * .2,
         ),
-        // 말풍선
         Flexible(
           child: Stack(
             children: [
+              // ┏━━━━━━━━━━━━━━┓
+              // ┃    말풍선    ┃
+              // ┗━━━━━━━━━━━━━━┛
               Positioned(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -90,16 +92,21 @@ class _MessageCardState extends State<MessageCard> {
                   ],
                 ),
               ),
-              // 메시지 read 확인
+              // ┏━━━━━━━━━━━━━━━━━━━━━━━━┓
+              // ┃    read 체크 아이콘    ┃
+              // ┗━━━━━━━━━━━━━━━━━━━━━━━━┛
               widget.message.read.isNotEmpty
                   ? Positioned(left: mq.width * -.016, bottom: 0, child: SvgPicture.asset('assets/icons/readOnIcon.svg', width: 18, height: 18))
                   : Positioned(left: mq.width * -.016, bottom: 0, child: SvgPicture.asset('assets/icons/readIcon.svg', width: 18, height: 18)),
+              // ┏━━━━━━━━━━━━━━━━━┓
+              // ┃    보낸 시간    ┃
+              // ┗━━━━━━━━━━━━━━━━━┛
               Positioned(
                   bottom: mq.height * .0035,
                   left: mq.width * .042,
                   child: Text(
                     CustomDateUtil.getFormattedTime(context: context, time: widget.message.sent),
-                    style: TextStyle(fontSize: 11, color: Colors.white),
+                    style: const TextStyle(fontSize: 11, color: Colors.white),
                   ))
             ],
           ),
@@ -120,10 +127,12 @@ class _MessageCardState extends State<MessageCard> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // 말풍선
           Flexible(
             child: Stack(
               children: [
+                // ┏━━━━━━━━━━━━━━━━━━━┓
+                // ┃    프로필 사진    ┃
+                // ┗━━━━━━━━━━━━━━━━━━━┛
                 Positioned(
                     left: mq.width * .02,
                     top: 0,
@@ -138,12 +147,19 @@ class _MessageCardState extends State<MessageCard> {
                         errorWidget: (context, url, error) => const Icon(Icons.error),
                       ),
                     )),
+                // ┏━━━━━━━━━━━━━━━━━┓
+                // ┃    유저 이름    ┃
+                // ┗━━━━━━━━━━━━━━━━━┛
                 Positioned(
                     left: mq.width * .15,
+                    top: mq.height * -.003,
                     child: Text(
                       widget.user.name,
                       style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 16),
                     )),
+                // ┏━━━━━━━━━━━━━━┓
+                // ┃    말풍선    ┃
+                // ┗━━━━━━━━━━━━━━┛
                 Positioned(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -185,10 +201,15 @@ class _MessageCardState extends State<MessageCard> {
                     ],
                   ),
                 ),
-                // 메시지 read 확인
+                // ┏━━━━━━━━━━━━━━━━━━━━━━━━┓
+                // ┃    read 체크 아이콘    ┃
+                // ┗━━━━━━━━━━━━━━━━━━━━━━━━┛
                 widget.message.read.isNotEmpty
                     ? Positioned(right: mq.width * -.016, bottom: 0, child: SvgPicture.asset('assets/icons/readOnIcon.svg', width: 18, height: 18))
                     : Positioned(right: mq.width * -.016, bottom: 0, child: SvgPicture.asset('assets/icons/readIcon.svg', width: 18, height: 18)),
+                // ┏━━━━━━━━━━━━━━━━━┓
+                // ┃    보낸 시간    ┃
+                // ┗━━━━━━━━━━━━━━━━━┛
                 Positioned(
                     bottom: mq.height * .004,
                     right: mq.width * .05,
@@ -199,7 +220,9 @@ class _MessageCardState extends State<MessageCard> {
               ],
             ),
           ),
-          // 우측 공백
+          // ┏━━━━━━━━━━━━━━━━━┓
+          // ┃    우측 공백    ┃
+          // ┗━━━━━━━━━━━━━━━━━┛
           SizedBox(
             width: mq.width * .15,
           ),

@@ -253,10 +253,13 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
       margin: EdgeInsets.only(top: mq.height * .01),
       color: const Color.fromRGBO(245, 245, 245, .94),
       child: Padding(
-        padding: EdgeInsets.only(top: mq.height * .012, bottom:  mq.height * .012, right: mq.width * .06),
+        padding: EdgeInsets.only(top: mq.height * .012, bottom: mq.height * .012, right: mq.width * .06),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // ┏━━━━━━━━━━━━━━━━━━┓
+            // ┃   첨부(+) 버튼   ┃
+            // ┗━━━━━━━━━━━━━━━━━━┛
             Padding(
               padding: EdgeInsets.only(top: mq.height * .003),
               child: IconButton(
@@ -269,6 +272,9 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                 ),
               ),
             ),
+            // ┏━━━━━━━━━━━━━━━━━┓
+            // ┃   텍스트 필드   ┃
+            // ┗━━━━━━━━━━━━━━━━━┛
             Expanded(
               child: Card(
                 color: Colors.white,
@@ -286,15 +292,17 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                           keyboardType: TextInputType.multiline,
                           minLines: 1,
                           maxLines: 6,
-                          style: TextStyle(fontSize: 14, letterSpacing: -0.24),
-                          // 자동 높이 조절
+                          style: const TextStyle(fontSize: 14, letterSpacing: -0.24),
                           decoration: const InputDecoration(
                             hintText: '채팅을 입력하세요',
-                            hintStyle: TextStyle(color: Colors.blueAccent, fontSize: 14),
+                            hintStyle: TextStyle(color: Colors.grey, fontSize: 14),
                             border: InputBorder.none,
                           ),
                         ),
                       ),
+                      // ┏━━━━━━━━━━━━━━━┓
+                      // ┃   전송 버튼   ┃
+                      // ┗━━━━━━━━━━━━━━━┛
                       MaterialButton(
                         minWidth: 0,
                         padding: EdgeInsets.all(mq.width * .005),
