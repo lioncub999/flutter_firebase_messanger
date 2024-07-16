@@ -31,6 +31,19 @@ class _ChatScreenState extends State<ChatScreen> {
   // 편집 status
   bool _isEditing = false;
 
+  // FocusNode 초기화
+  final FocusNode _searchFocusNode = FocusNode();
+
+  // ┏━━━━━━━━━━━━━┓
+  // ┃   dispose   ┃
+  // ┗━━━━━━━━━━━━━┛
+  @override
+  void dispose() {
+    // FocusNode 해제
+    _searchFocusNode.dispose();
+    super.dispose();
+  }
+
   // ┏━━━━━━━━━━━━━━━┓
   // ┃   initState   ┃
   // ┗━━━━━━━━━━━━━━━┛
@@ -51,6 +64,7 @@ class _ChatScreenState extends State<ChatScreen> {
             // 검색 활성화 TextField show
             ? TextField(
                 // 포커스 노드 연결
+                focusNode: _searchFocusNode,
                 cursorColor: Colors.white,
                 decoration: const InputDecoration(
                   border: InputBorder.none,
@@ -91,6 +105,15 @@ class _ChatScreenState extends State<ChatScreen> {
               onPressed: () {
                 setState(() {
                   _isSearching = !_isSearching;
+                  Future.delayed(const Duration(milliseconds: 500), () {
+                    if (_isSearching) {
+                      // 검색 버튼을 누르면 포커스 설정
+                      FocusScope.of(context).requestFocus(_searchFocusNode);
+                    } else {
+                      // 검색 해제 시 포커스 해제
+                      _searchFocusNode.unfocus();
+                    }
+                  });
                 });
               },
               icon: Icon(_isSearching ? CupertinoIcons.clear_circled_solid : Icons.search)),
