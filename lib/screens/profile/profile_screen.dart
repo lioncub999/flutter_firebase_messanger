@@ -128,30 +128,48 @@ class _ProfileScreenState extends State<ProfileScreen> {
       floatingActionButton: Padding(
         padding: EdgeInsets.only(bottom: 10),
         child: FloatingActionButton.extended(
-            backgroundColor: Colors.redAccent,
-            onPressed: () async {
+          backgroundColor: Colors.redAccent,
+          onPressed: () async {
+            try {
               CustomDialogs.showProgressBar(context);
 
+              // 비동기 작업 1: 서버에서 데이터 업데이트
               await APIs.updateActiveStatus(false);
 
-              await APIs.auth.signOut().then((value) async {
-                await GoogleSignIn().signOut().then((value) {
-                  Navigator.pop(context);
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => LoginScreen()));
+              // 비동기 작업 2: Firebase 로그아웃
+              await APIs.auth.signOut();
+              await GoogleSignIn().signOut();
 
-                  APIs.auth = FirebaseAuth.instance;
-                });
-              });
-            },
-            icon: const Icon(
-              Icons.add_comment,
-              color: Colors.white,
-            ),
-            label: const Text(
-              "Logout",
-              style: TextStyle(color: Colors.white),
-            )),
+              // 모든 비동기 작업 완료 후 실행될 코드
+              Navigator.pop(context); // 프로그레스 다이얼로그 닫기
+
+              // 로그인 화면으로 이동하고, 모든 이전 화면을 제거
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (_) => const LoginScreen()),
+                    (route) => false,
+              );
+
+              // 스낵바 보여주기 (로그아웃 메시지)
+              CustomDialogs.showSnackbar(context, '로그아웃 되었습니다');
+
+              // FirebaseAuth 객체 재설정
+              APIs.auth = FirebaseAuth.instance;
+            } catch (e) {
+              print('로그아웃 중 에러 발생: $e');
+              // 에러 처리
+              CustomDialogs.showSnackbar(context, '로그아웃 중 오류가 발생되었습니다');
+            }
+          },
+          icon: const Icon(
+            Icons.add_comment,
+            color: Colors.white,
+          ),
+          label: const Text(
+            "Logout",
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
       ),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
@@ -184,10 +202,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               height: mq.height * .2,
                               fit: BoxFit.cover,
                               imageUrl: widget.user.image,
-                              placeholder: (context, url) =>
-                                  CircularProgressIndicator(),
-                              errorWidget: (context, url, error) =>
-                                  Icon(Icons.error),
+                              placeholder: (context, url) => CircularProgressIndicator(),
+                              errorWidget: (context, url, error) => Icon(Icons.error),
                             ),
                           ),
                     Positioned(
@@ -222,12 +238,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   TextFormField(
                     initialValue: widget.user.name,
                     onSaved: (val) => APIs.me.name = val ?? '',
-                    validator: (val) =>
-                        val != null && val.isNotEmpty ? null : "Required Field",
+                    validator: (val) => val != null && val.isNotEmpty ? null : "Required Field",
                     decoration: InputDecoration(
                         prefixIcon: Icon(Icons.person, color: Colors.blue),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12)),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                         hintText: 'NAME',
                         label: const Text("Name")),
                   ),
@@ -238,12 +252,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   TextFormField(
                     initialValue: widget.user.about,
                     onSaved: (val) => APIs.me.about = val ?? '',
-                    validator: (val) =>
-                        val != null && val.isNotEmpty ? null : "Required Field",
+                    validator: (val) => val != null && val.isNotEmpty ? null : "Required Field",
                     decoration: InputDecoration(
                         prefixIcon: Icon(Icons.person, color: Colors.blue),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12)),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                         hintText: 'about',
                         label: const Text("About")),
                   ),
@@ -253,15 +265,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
-                          shape: StadiumBorder(),
-                          minimumSize: Size(mq.width * .4, mq.height * .06)),
+                          backgroundColor: Colors.blue, shape: StadiumBorder(), minimumSize: Size(mq.width * .4, mq.height * .06)),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           _formKey.currentState!.save();
                           APIs.updateUserInfo().then((value) {
-                            CustomDialogs.showSnackbar(
-                                context, 'Profile Updated SuccessFully!');
+                            CustomDialogs.showSnackbar(context, 'Profile Updated SuccessFully!');
                           });
                         }
                       },
@@ -286,14 +295,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void _showBottomSheet() {
     showModalBottomSheet(
         context: context,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
         builder: (_) {
           return ListView(
             shrinkWrap: true,
-            padding: EdgeInsets.only(
-                top: mq.height * 0.03, bottom: mq.height * 0.05),
+            padding: EdgeInsets.only(top: mq.height * 0.03, bottom: mq.height * 0.05),
             children: [
               Text(
                 "Pick Profile Picture",
