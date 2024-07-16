@@ -79,6 +79,8 @@ flutter:
     - assets/icons/moreIcon.svg
     - assets/icons/readIcon.svg
     - assets/icons/readOnIcon.svg
+    - assets/icons/plusIcon.svg
+    - assets/icons/sendIcon.svg
   fonts :
     - family: NotoSansKR
       fonts :

@@ -73,7 +73,7 @@ class _MessageCardState extends State<MessageCard> {
                       child: widget.message.type == Type.text
                           ? Text(
                               widget.message.msg,
-                              style: const TextStyle(fontSize: 14, color: Color.fromRGBO(77, 77, 77, 1)),
+                              style: const TextStyle(fontSize: 14, color: Color.fromRGBO(77, 77, 77, 1), letterSpacing: -0.2),
                             )
                           : ClipRRect(
                               borderRadius: BorderRadius.circular(25),
@@ -168,7 +168,7 @@ class _MessageCardState extends State<MessageCard> {
                         child: widget.message.type == Type.text
                             ? Text(
                                 widget.message.msg,
-                                style: const TextStyle(fontSize: 14, color: Colors.white),
+                                style: const TextStyle(fontSize: 14, color: Colors.white, letterSpacing: -0.2),
                               )
                             : ClipRRect(
                                 borderRadius: BorderRadius.circular(25),

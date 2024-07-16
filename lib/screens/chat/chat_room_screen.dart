@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:modu_messenger_firebase/helper/permission_helper.dart';
 import 'package:modu_messenger_firebase/widgets/message_card.dart';
@@ -232,66 +233,78 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
   // }
 
   // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-  // ┃   채팅 인풋 위젯 (임시) - 디자인   ┃
+  // ┃   채팅 텍스트 필드 위젯            ┃
   // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
   Widget _chatInput() {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: mq.height * .02, horizontal: mq.width * .025),
-      child: Row(
-        children: [
-          Expanded(
-            child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
+    return Container(
+      constraints: BoxConstraints(minHeight: mq.height * .12),
+      width: mq.width * 1,
+      margin: EdgeInsets.only(top: mq.height * .01),
+      color: const Color.fromRGBO(245, 245, 245, .9),
+      child: Padding(
+        padding: EdgeInsets.only(top: mq.height * .012, bottom:  mq.height * .012, right: mq.width * .06),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(top: mq.height * .003),
+              child: IconButton(
+                onPressed: () {},
+                icon: SvgPicture.asset(
+                  'assets/icons/plusIcon.svg',
+                  width: 24,
+                  height: 24,
+                  color: Colors.black,
+                ),
               ),
-              child: Row(children: [
-                SizedBox(
-                  width: mq.width * .05,
-                ),
-                Expanded(
-                    child: TextField(
-                  // 포커스 노드 연결
-                  controller: _textController,
-                  keyboardType: TextInputType.multiline,
-                  minLines: 1,
-                  maxLines: 6,
-                  decoration: const InputDecoration(hintText: '채팅을 입력하세요', hintStyle: TextStyle(color: Colors.blueAccent), border: InputBorder.none),
-                )),
-                IconButton(
-                  onPressed: () {
-                    _requestPhotoPermission();
-                  },
-                  icon: const Icon(Icons.image),
-                  color: Colors.blueAccent,
-                ),
-                IconButton(
-                  onPressed: () {
-                    _requestCameraPermission();
-                  },
-                  icon: const Icon(Icons.camera_alt_rounded),
-                  color: Colors.blueAccent,
-                )
-              ]),
             ),
-          ),
-          MaterialButton(
-            minWidth: 0,
-            padding: const EdgeInsets.only(top: 10, bottom: 10, right: 5, left: 10),
-            shape: const CircleBorder(),
-            onPressed: () {
-              if (_textController.text.isNotEmpty) {
-                ChatAPIs.sendMessage(widget.user, _textController.text, Type.text);
-                _textController.text = '';
-              }
-            },
-            color: Colors.green,
-            child: const Icon(
-              Icons.send,
-              color: Colors.white,
-              size: 28,
+            Expanded(
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: Container(
+                  padding: EdgeInsets.only(left: mq.width * .05, right: mq.width * .02),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _textController,
+                          keyboardType: TextInputType.multiline,
+                          minLines: 1,
+                          maxLines: 6,
+                          style: TextStyle(fontSize: 14, letterSpacing: -0.24),
+                          // 자동 높이 조절
+                          decoration: const InputDecoration(
+                            hintText: '채팅을 입력하세요',
+                            hintStyle: TextStyle(color: Colors.blueAccent, fontSize: 14),
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                      MaterialButton(
+                        minWidth: 0,
+                        padding: EdgeInsets.all(mq.width * .005),
+                        shape: const CircleBorder(),
+                        onPressed: () {
+                          if (_textController.text.isNotEmpty) {
+                            ChatAPIs.sendMessage(widget.user, _textController.text, Type.text);
+                            _textController.text = '';
+                          }
+                        },
+                        child: SvgPicture.asset(
+                          'assets/icons/sendIcon.svg',
+                          width: 28,
+                          height: 28,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
-          )
-        ],
+          ],
+        ),
       ),
     );
   }
