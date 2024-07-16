@@ -19,8 +19,6 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  late FocusNode _chatSearchFocusNode; // 포커스 노드 추가
-
   // _ChatList 초기화
   List<ChatUser> _chatList = [];
 
@@ -30,31 +28,8 @@ class _ChatScreenState extends State<ChatScreen> {
   // 검색 status
   bool _isSearching = false;
 
-  _setSearchingState(bool state) {
-    setState(() {
-      _isSearching = state;
-    });
-    if (_isSearching == true) {
-      CustomDialogs.showProgressBar(context);
-      // _isSearching state 변경 후 focus 를 위해 0.5초 딜레이
-      Future.delayed(const Duration(milliseconds: 500), () {
-        FocusScope.of(context).requestFocus(_chatSearchFocusNode);
-        Navigator.pop(context);
-      });
-    }
-  }
-
   // 편집 status
   bool _isEditing = false;
-
-  // ┏━━━━━━━━━━━━━━━━━━━━━━┓
-  // ┃   포커스 노드 해제   ┃
-  // ┗━━━━━━━━━━━━━━━━━━━━━━┛
-  @override
-  void dispose() {
-    _chatSearchFocusNode.dispose();
-    super.dispose();
-  }
 
   // ┏━━━━━━━━━━━━━━━┓
   // ┃   initState   ┃
@@ -62,7 +37,6 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
-    _chatSearchFocusNode = FocusNode();
   }
 
   @override
@@ -77,7 +51,6 @@ class _ChatScreenState extends State<ChatScreen> {
             // 검색 활성화 TextField show
             ? TextField(
                 // 포커스 노드 연결
-                focusNode: _chatSearchFocusNode,
                 cursorColor: Colors.white,
                 decoration: const InputDecoration(
                   border: InputBorder.none,
@@ -116,7 +89,9 @@ class _ChatScreenState extends State<ChatScreen> {
           // Appbar - actions - 검색 버튼
           IconButton(
               onPressed: () {
-                _setSearchingState(!_isSearching);
+                setState(() {
+                  _isSearching = !_isSearching;
+                });
               },
               icon: Icon(_isSearching ? CupertinoIcons.clear_circled_solid : Icons.search)),
           // Appbar - actions - 더보기 버튼
@@ -131,9 +106,7 @@ class _ChatScreenState extends State<ChatScreen> {
       // ┃   Body   ┃
       // ┗━━━━━━━━━━┛
       body: GestureDetector(
-        behavior: HitTestBehavior.opaque,
         onTap: () {
-          _chatSearchFocusNode.unfocus(); // 제스처 감지 시 포커스 해제
         },
         child: Container(
           color: const Color.fromRGBO(56, 56, 60, 1), // chat background

@@ -92,14 +92,14 @@ class _MessageCardState extends State<MessageCard> {
               ),
               // 메시지 read 확인
               widget.message.read.isNotEmpty
-                  ? Positioned(left: mq.width * -.022, bottom: 0, child: SvgPicture.asset('assets/icons/readOnIcon.svg', width: 24, height: 24))
-                  : Positioned(left: mq.width * -.022, bottom: 0, child: SvgPicture.asset('assets/icons/readIcon.svg', width: 24, height: 24)),
+                  ? Positioned(left: mq.width * -.016, bottom: 0, child: SvgPicture.asset('assets/icons/readOnIcon.svg', width: 18, height: 18))
+                  : Positioned(left: mq.width * -.016, bottom: 0, child: SvgPicture.asset('assets/icons/readIcon.svg', width: 18, height: 18)),
               Positioned(
-                  bottom: mq.height * .005,
-                  left: mq.width * .055,
+                  bottom: mq.height * .0035,
+                  left: mq.width * .042,
                   child: Text(
                     CustomDateUtil.getFormattedTime(context: context, time: widget.message.sent),
-                    style: TextStyle(fontSize: 12, color: Colors.white),
+                    style: TextStyle(fontSize: 11, color: Colors.white),
                   ))
             ],
           ),
@@ -187,14 +187,14 @@ class _MessageCardState extends State<MessageCard> {
                 ),
                 // 메시지 read 확인
                 widget.message.read.isNotEmpty
-                    ? Positioned(right: mq.width * -.022, bottom: 0, child: SvgPicture.asset('assets/icons/readOnIcon.svg', width: 24, height: 24))
-                    : Positioned(right: mq.width * -.022, bottom: 0, child: SvgPicture.asset('assets/icons/readIcon.svg', width: 24, height: 24)),
+                    ? Positioned(right: mq.width * -.016, bottom: 0, child: SvgPicture.asset('assets/icons/readOnIcon.svg', width: 18, height: 18))
+                    : Positioned(right: mq.width * -.016, bottom: 0, child: SvgPicture.asset('assets/icons/readIcon.svg', width: 18, height: 18)),
                 Positioned(
-                    bottom: mq.height * .005,
-                    right: mq.width * .055,
+                    bottom: mq.height * .004,
+                    right: mq.width * .05,
                     child: Text(
                       CustomDateUtil.getFormattedTime(context: context, time: widget.message.sent),
-                      style: const TextStyle(fontSize: 12, color: Colors.white),
+                      style: const TextStyle(fontSize: 11, color: Colors.white),
                     ))
               ],
             ),

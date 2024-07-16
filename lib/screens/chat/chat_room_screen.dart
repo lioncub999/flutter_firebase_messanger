@@ -25,6 +25,7 @@ class ChatRoomScreen extends StatefulWidget {
 }
 
 class _ChatRoomScreenState extends State<ChatRoomScreen> {
+  final FocusNode _focusNode = FocusNode(); // 포커스 노드 추가
   final _textController = TextEditingController(); // TextField 컨트롤러
 
   bool _isUploading = false; // 사진 전송시 대화방 로딩중 표시
@@ -37,6 +38,16 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
     setState(() {
       _image = image;
     });
+  }
+
+  // ┏━━━━━━━━━━━━━━━━━━━━━━┓
+  // ┃   포커스 노드 해제   ┃
+  // ┗━━━━━━━━━━━━━━━━━━━━━━┛
+  @override
+  void dispose() {
+    _textController.dispose();
+    _focusNode.dispose();
+    super.dispose();
   }
 
   // ┏━━━━━━━━━━━━━━━━━━━━━━┓
@@ -111,7 +122,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
       body: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () {
-          FocusScope.of(context).unfocus(); // 제스처 감지 시 포커스 해제
+          _focusNode.unfocus(); // 포커스 해제
         },
         // 채팅 내용
         child: Column(
@@ -240,7 +251,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
       constraints: BoxConstraints(minHeight: mq.height * .12),
       width: mq.width * 1,
       margin: EdgeInsets.only(top: mq.height * .01),
-      color: const Color.fromRGBO(245, 245, 245, .9),
+      color: const Color.fromRGBO(245, 245, 245, .94),
       child: Padding(
         padding: EdgeInsets.only(top: mq.height * .012, bottom:  mq.height * .012, right: mq.width * .06),
         child: Row(
@@ -260,6 +271,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
             ),
             Expanded(
               child: Card(
+                color: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
@@ -269,6 +281,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                     children: [
                       Expanded(
                         child: TextField(
+                          focusNode: _focusNode,
                           controller: _textController,
                           keyboardType: TextInputType.multiline,
                           minLines: 1,
