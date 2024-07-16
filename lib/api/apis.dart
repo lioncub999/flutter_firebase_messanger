@@ -47,11 +47,12 @@ class APIs {
   // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
   static Future<void> getFirebaseMessagingToken() async {
     await fMessaging.requestPermission();
-    await fMessaging.getToken().then((t) {
-      if (t != null) {
-        me.pushToken = t;
-      }
-    });
+    // 푸시토큰
+    // await fMessaging.getToken().then((t) {
+    //   if (t != null) {
+    //     me.pushToken = t;
+    //   }
+    // });
   }
 
   // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓

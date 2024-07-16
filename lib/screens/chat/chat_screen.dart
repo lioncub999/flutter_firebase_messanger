@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:modu_messenger_firebase/helper/custom_dialogs.dart';
+import 'package:flutter/painting.dart';
+import 'package:modu_messenger_firebase/screens/chat/chat_search_screen.dart';
 import 'package:modu_messenger_firebase/screens/profile/profile_screen.dart';
 import 'package:modu_messenger_firebase/widgets/chat_user_card.dart';
 
@@ -50,6 +51,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
+    _isSearching = false; // 초기 검색 상태 설정
   }
 
   @override
@@ -74,14 +76,16 @@ class _ChatScreenState extends State<ChatScreen> {
                       // 포커스 노드 연결
                       focusNode: _searchFocusNode,
                       cursorColor: Colors.black,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        hintText: '이름을 입력 해주세요.',
-                        hintStyle: TextStyle(color: Colors.grey),
-                      ),
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: '이름을 입력 해주세요.',
+                          hintStyle: const TextStyle(color: Colors.grey),
+                          isDense: true,
+                          contentPadding: EdgeInsets.only(top: mq.height * .013)),
                       style: const TextStyle(fontSize: 14, letterSpacing: 0.5, color: Colors.white),
                       // 검색창 타이핑 시 받아온 처음 받아온 데이터 에서 검색어 찾음 (클라 에서만 처리)
                       onChanged: (val) {
+                        print(_searchFocusNode);
                         _searchChatList.clear();
                         for (var i in _chatList) {
                           if (i.name.toLowerCase().contains(val.toLowerCase())) {
@@ -114,20 +118,25 @@ class _ChatScreenState extends State<ChatScreen> {
           // Appbar - actions - 검색 버튼
           IconButton(
               onPressed: () {
-                setState(() {
-                  _isSearching = !_isSearching;
-                  CustomDialogs.showProgressBar(context);
-                  Future.delayed(const Duration(milliseconds: 500), () {
-                    Navigator.pop(context);
-                  });
-                  if (_isSearching) {
-                    // 검색 버튼을 누르면 포커스 설정
-                    FocusScope.of(context).requestFocus(_searchFocusNode);
-                  } else {
-                    // 검색 해제 시 포커스 해제
-                    _searchFocusNode.unfocus();
-                  }
-                });
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) => ChatSearchScreen(),
+                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                      const begin = Offset(0.0, 1.0);
+                      const end = Offset.zero;
+                      const curve = Curves.slowMiddle;
+
+                      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+                      return SlideTransition(
+                        position: animation.drive(tween),
+                        child: child,
+                      );
+                    },
+                    transitionDuration: Duration(milliseconds: 200)
+                  ),
+                );
               },
               icon: Icon(_isSearching ? CupertinoIcons.clear_circled_solid : Icons.search)),
           // Appbar - actions - 더보기 버튼
