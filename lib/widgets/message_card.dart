@@ -42,9 +42,7 @@ class _MessageCardState extends State<MessageCard> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         // 좌측 공백
-        SizedBox(
-          width: mq.width * .2,
-        ),
+        SizedBox(width: mq.width * .1),
         Flexible(
           child: Stack(
             children: [
@@ -56,15 +54,11 @@ class _MessageCardState extends State<MessageCard> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Container(
-                      constraints: BoxConstraints(minWidth: mq.width * .2),
+                      constraints: BoxConstraints(minWidth: mq.width * .2, maxWidth: mq.width * .75),
                       padding: EdgeInsets.symmetric(
                           horizontal: widget.message.type == Type.image ? mq.width * 0 : mq.width * .05,
                           vertical: widget.message.type == Type.image ? mq.width * 0 : mq.width * .03),
-                      margin: EdgeInsets.only(
-                        top: mq.height * .01,
-                        bottom: mq.height * .03,
-                        right: mq.width * .04,
-                      ),
+                      margin: EdgeInsets.only(top: mq.height * .01, bottom: mq.height * .01, right: mq.width * .04, left: mq.width * .2),
                       decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: widget.message.type == Type.image
@@ -96,17 +90,23 @@ class _MessageCardState extends State<MessageCard> {
               // ┃    read 체크 아이콘    ┃
               // ┗━━━━━━━━━━━━━━━━━━━━━━━━┛
               widget.message.read.isNotEmpty
-                  ? Positioned(left: mq.width * -.016, bottom: 0, child: SvgPicture.asset('assets/icons/readOnIcon.svg', width: 18, height: 18))
-                  : Positioned(left: mq.width * -.016, bottom: 0, child: SvgPicture.asset('assets/icons/readIcon.svg', width: 18, height: 18)),
+                  ? Positioned(
+                      left: mq.width * .135, bottom: mq.height * .027, child: SvgPicture.asset('assets/icons/readOnIcon.svg', width: 18, height: 18))
+                  : Positioned(
+                      left: mq.width * .135, bottom: mq.height * .027, child: SvgPicture.asset('assets/icons/readIcon.svg', width: 18, height: 18)),
               // ┏━━━━━━━━━━━━━━━━━┓
               // ┃    보낸 시간    ┃
               // ┗━━━━━━━━━━━━━━━━━┛
               Positioned(
-                  bottom: mq.height * .0035,
-                  left: mq.width * .042,
-                  child: Text(
-                    CustomDateUtil.getFormattedTime(context: context, time: widget.message.sent),
-                    style: const TextStyle(fontSize: 11, color: Colors.white),
+                  bottom: mq.height * .008,
+                  left: mq.width * -0.116,
+                  child: Container(
+                    width: mq.width * .3,
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      CustomDateUtil.getFormattedTime(context: context, time: widget.message.sent),
+                      style: const TextStyle(fontSize: 11, color: Colors.white),
+                    ),
                   ))
             ],
           ),
@@ -123,7 +123,7 @@ class _MessageCardState extends State<MessageCard> {
       ChatAPIs.updateMessageReadStatus(widget.message);
     }
     return Padding(
-      padding: EdgeInsets.only(top: mq.height * .01),
+      padding: EdgeInsets.only(top: mq.height * .001),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -169,11 +169,7 @@ class _MessageCardState extends State<MessageCard> {
                         padding: EdgeInsets.symmetric(
                             horizontal: widget.message.type == Type.image ? mq.width * 0 : mq.width * .05,
                             vertical: widget.message.type == Type.image ? mq.width * 0 : mq.width * .03),
-                        margin: EdgeInsets.only(
-                          top: mq.height * .03,
-                          bottom: mq.height * .03,
-                          left: mq.width * .15,
-                        ),
+                        margin: EdgeInsets.only(top: mq.height * .03, bottom: mq.height * .01, left: mq.width * .15, right: mq.width * .2),
                         decoration: BoxDecoration(
                             color: const Color.fromRGBO(0, 174, 255, 1),
                             borderRadius: widget.message.type == Type.image
@@ -205,17 +201,27 @@ class _MessageCardState extends State<MessageCard> {
                 // ┃    read 체크 아이콘    ┃
                 // ┗━━━━━━━━━━━━━━━━━━━━━━━━┛
                 widget.message.read.isNotEmpty
-                    ? Positioned(right: mq.width * -.016, bottom: 0, child: SvgPicture.asset('assets/icons/readOnIcon.svg', width: 18, height: 18))
-                    : Positioned(right: mq.width * -.016, bottom: 0, child: SvgPicture.asset('assets/icons/readIcon.svg', width: 18, height: 18)),
+                    ? Positioned(
+                        right: mq.width * 0.135,
+                        bottom: mq.height * .027,
+                        child: SvgPicture.asset('assets/icons/readOnIcon.svg', width: 18, height: 18))
+                    : Positioned(
+                        right: mq.width * 0.135,
+                        bottom: mq.height * .027,
+                        child: SvgPicture.asset('assets/icons/readIcon.svg', width: 18, height: 18)),
                 // ┏━━━━━━━━━━━━━━━━━┓
                 // ┃    보낸 시간    ┃
                 // ┗━━━━━━━━━━━━━━━━━┛
                 Positioned(
-                    bottom: mq.height * .004,
-                    right: mq.width * .05,
-                    child: Text(
-                      CustomDateUtil.getFormattedTime(context: context, time: widget.message.sent),
-                      style: const TextStyle(fontSize: 11, color: Colors.white),
+                    bottom: mq.height * .008,
+                    right: mq.width * -0.115,
+                    child: Container(
+                      width: mq.width * .3,
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        CustomDateUtil.getFormattedTime(context: context, time: widget.message.sent),
+                        style: const TextStyle(fontSize: 11, color: Colors.white),
+                      ),
                     ))
               ],
             ),

@@ -62,28 +62,39 @@ class _ChatScreenState extends State<ChatScreen> {
         // Appbar - title 검색
         title: _isSearching
             // 검색 활성화 TextField show
-            ? TextField(
-                // 포커스 노드 연결
-                focusNode: _searchFocusNode,
-                cursorColor: Colors.white,
-                decoration: const InputDecoration(
-                  border: InputBorder.none,
-                  hintText: '이름을 입력 해주세요.',
-                  hintStyle: TextStyle(color: Colors.white),
+            ? Card(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                color: const Color.fromRGBO(107, 107, 107, 1),
+                child: Padding(
+                  padding: EdgeInsets.only(left: mq.width * .04, right: mq.width * .04, bottom: mq.height * .01),
+                  child: SizedBox(
+                    width: mq.width * .5,
+                    height: mq.height * .04,
+                    child: TextField(
+                      // 포커스 노드 연결
+                      focusNode: _searchFocusNode,
+                      cursorColor: Colors.black,
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintText: '이름을 입력 해주세요.',
+                        hintStyle: TextStyle(color: Colors.grey),
+                      ),
+                      style: const TextStyle(fontSize: 14, letterSpacing: 0.5, color: Colors.white),
+                      // 검색창 타이핑 시 받아온 처음 받아온 데이터 에서 검색어 찾음 (클라 에서만 처리)
+                      onChanged: (val) {
+                        _searchChatList.clear();
+                        for (var i in _chatList) {
+                          if (i.name.toLowerCase().contains(val.toLowerCase())) {
+                            _searchChatList.add(i);
+                          }
+                        }
+                        setState(() {
+                          _searchChatList;
+                        });
+                      },
+                    ),
+                  ),
                 ),
-                style: const TextStyle(fontSize: 17, letterSpacing: 0.5, color: Colors.white),
-                // 검색창 타이핑 시 받아온 처음 받아온 데이터 에서 검색어 찾음 (클라 에서만 처리)
-                onChanged: (val) {
-                  _searchChatList.clear();
-                  for (var i in _chatList) {
-                    if (i.name.toLowerCase().contains(val.toLowerCase())) {
-                      _searchChatList.add(i);
-                    }
-                  }
-                  setState(() {
-                    _searchChatList;
-                  });
-                },
               )
             // 검색 비활성화 TextField none
             : const Text("쪽지"),
@@ -105,15 +116,17 @@ class _ChatScreenState extends State<ChatScreen> {
               onPressed: () {
                 setState(() {
                   _isSearching = !_isSearching;
+                  CustomDialogs.showProgressBar(context);
                   Future.delayed(const Duration(milliseconds: 500), () {
-                    if (_isSearching) {
-                      // 검색 버튼을 누르면 포커스 설정
-                      FocusScope.of(context).requestFocus(_searchFocusNode);
-                    } else {
-                      // 검색 해제 시 포커스 해제
-                      _searchFocusNode.unfocus();
-                    }
+                    Navigator.pop(context);
                   });
+                  if (_isSearching) {
+                    // 검색 버튼을 누르면 포커스 설정
+                    FocusScope.of(context).requestFocus(_searchFocusNode);
+                  } else {
+                    // 검색 해제 시 포커스 해제
+                    _searchFocusNode.unfocus();
+                  }
                 });
               },
               icon: Icon(_isSearching ? CupertinoIcons.clear_circled_solid : Icons.search)),
@@ -129,7 +142,9 @@ class _ChatScreenState extends State<ChatScreen> {
       // ┃   Body   ┃
       // ┗━━━━━━━━━━┛
       body: GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: () {
+          _searchFocusNode.unfocus(); // 포커스 해제
         },
         child: Container(
           color: const Color.fromRGBO(56, 56, 60, 1), // chat background

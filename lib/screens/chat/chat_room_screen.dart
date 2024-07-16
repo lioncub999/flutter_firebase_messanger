@@ -151,10 +151,45 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                             padding: EdgeInsets.only(top: mq.height * 0.01),
                             physics: const BouncingScrollPhysics(),
                             itemBuilder: (context, index) {
+                              // 마지막 메시지이거나, 다음 메시지와 날짜가 다른 경우 구분선 추가
+                              if (index == _messageList.length - 1 || _isDifferentDay(index)) {
+                                return Column(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(vertical: 6.0),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Expanded(
+                                            child: Container(
+                                              height: 1.5,
+                                              color: Colors.grey.withOpacity(1),
+                                              margin: const EdgeInsets.only(right: 6.0),
+                                            ),
+                                          ),
+                                          Text(
+                                            _getDateLabel(index),
+                                            style: TextStyle(color: Colors.grey.withOpacity(1), fontSize: 11, fontWeight: FontWeight.w600),
+                                          ),
+                                          Expanded(
+                                            child: Container(
+                                              height: 1.5,
+                                              color: Colors.grey.withOpacity(1),
+                                              margin: const EdgeInsets.only(left: 6.0),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    MessageCard(message: _messageList[index], user: widget.user),
+                                  ],
+                                );
+                              } else {
+                                return MessageCard(message: _messageList[index], user: widget.user);
+                              }
                               // ┏━━━━━━━━━━━━┓
                               // ┃   말풍선   ┃
                               // ┗━━━━━━━━━━━━┛
-                              return MessageCard(message: _messageList[index], user: widget.user);
                             },
                           );
                         } else {
@@ -263,7 +298,9 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
             Padding(
               padding: EdgeInsets.only(top: mq.height * .003),
               child: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  _showBottomSheet();
+                },
                 icon: SvgPicture.asset(
                   'assets/icons/plusIcon.svg',
                   width: 24,
@@ -328,5 +365,59 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
         ),
       ),
     );
+  }
+
+  // ┏━━━━━━━━━━━━━━━━━━━━┓
+  // ┃   사진 전송 임시   ┃
+  // ┗━━━━━━━━━━━━━━━━━━━━┛
+  void _showBottomSheet() {
+    showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+        builder: (_) {
+          return ListView(
+            shrinkWrap: true,
+            padding: EdgeInsets.only(top: mq.height * 0.03, bottom: mq.height * 0.05),
+            children: [
+              Text(
+                "Pick Profile Picture",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  IconButton(
+                    onPressed: () async {
+                      _requestPhotoPermission();
+                    },
+                    icon: Icon(
+                      Icons.add_photo_alternate,
+                      size: 100,
+                    ),
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        _requestCameraPermission();
+                      },
+                      icon: Icon(
+                        Icons.camera_enhance,
+                        size: 100,
+                      ))
+                ],
+              )
+            ],
+          );
+        });
+  }
+  bool _isDifferentDay(int index) {
+    final currentMessageDate = DateTime.fromMillisecondsSinceEpoch(int.parse(_messageList[index].sent));
+    final nextMessageDate = DateTime.fromMillisecondsSinceEpoch(int.parse(_messageList[index + 1].sent));
+    return currentMessageDate.day != nextMessageDate.day;
+  }
+
+  String _getDateLabel(int index) {
+    final messageDate = DateTime.fromMillisecondsSinceEpoch(int.parse(_messageList[index].sent));
+    return '${messageDate.year}-${messageDate.month}-${messageDate.day}';
   }
 }
