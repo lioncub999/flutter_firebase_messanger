@@ -16,10 +16,9 @@ import '../screens/chat/chat_room_screen.dart';
 // ┃                                  ChatUserCard                                    ┃
 // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 class ChatUserCard extends StatefulWidget {
-  const ChatUserCard({super.key, required this.user, required this.isEditing});
+  const ChatUserCard({super.key, required this.user});
 
   final ChatUser user;
-  final bool isEditing;
 
   @override
   State<ChatUserCard> createState() => _ChatUserCardState();

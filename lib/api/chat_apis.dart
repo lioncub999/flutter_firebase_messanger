@@ -12,6 +12,18 @@ import 'apis.dart';
 // ┃                                                                                                    ┃
 // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 class ChatAPIs {
+  // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+  // ┃   ● 내 채팅방 조회                                                  ┃
+  // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllUsers() {
+    return APIs.fireStore.collection('users').where('id', isNotEqualTo: APIs.user.uid).snapshots();
+  }
+
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getMyChatRoom() {
+
+    return APIs.fireStore.collection('chats').doc('d1pVU4ywmKcSqYjaXRUUrkxmyFi2_l4Pb90CHKtR7GHcNwsghn27K1Sd2').collection('messages').where('fromId', isEqualTo: 'l4Pb90CHKtR7GHcNwsghn27K1Sd2').snapshots();
+  }
+
   // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
   // ┃   ● 채팅방 아이디 가져오기                                           ┃
   // ┃     - 내 아이디와 상대방 아이디로 만들어진 대화방 아이디 가져오기    ┃

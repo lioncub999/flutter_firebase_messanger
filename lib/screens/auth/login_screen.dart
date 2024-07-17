@@ -37,10 +37,10 @@ class _LoginScreenState extends State<LoginScreen> {
   // ┃   로그인 버튼 클릭   ┃
   // ┗━━━━━━━━━━━━━━━━━━━━━━┛
   _handleLoginBtnClick() {
-    CustomDialogs.showProgressBar(context); // 로딩 중 화면 표시
+    CustomDialogs.showProgressBar(context); // 로딩 시작
 
     _signInWithGoogle().then((user) async {
-      Navigator.pop(context); // 백그라운드 로딩 닫기
+      Navigator.pop(context); // 로딩 끝
       if (user != null) {
         // db에 로그인 정보 있으면 그냥 로그인
         if ((await APIs.userExists())) {
@@ -82,89 +82,108 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(56, 56, 60, 1), // LoginScreen backgroundColor
-      // ┏━━━━━━━━┓
-      // ┃  Body  ┃
-      // ┗━━━━━━━━┛
-      body: Stack(
-        children: [
-          // ┏━━━━━━━━━━━━━━━━━━━━━┓
-          // ┃  Body - LoginTitle  ┃
-          // ┗━━━━━━━━━━━━━━━━━━━━━┛
-          AnimatedPositioned(
-              duration: const Duration(milliseconds: 500),
-              top: mq.height * 0.2,
-              right: _isAnimate ? mq.width * 0 : mq.width * 1,
-              width: mq.width,
-              // LoginTitle - TEXT
-              child: Container(
-                padding: const EdgeInsets.only(left: 50, right: 50),
-                child: const Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+        backgroundColor: const Color.fromRGBO(56, 56, 60, 1), // LoginScreen backgroundColor
+        // ┏━━━━━━━━┓
+        // ┃  Body  ┃
+        // ┗━━━━━━━━┛
+        body: SizedBox(
+          width: mq.width,
+          height: mq.height,
+          // 화면 요소
+          child: Column(
+            children: [
+              // 타이틀 위쪽 여백
+              SizedBox(
+                width: mq.width,
+                height: mq.height * .25,
+              ),
+              // ┏━━━━━━━━━━━━━━━━━━━━━┓
+              // ┃  Body - LoginTitle  ┃
+              // ┗━━━━━━━━━━━━━━━━━━━━━┛
+              SizedBox(
+                width: mq.width,
+                height: mq.height * .2,
+                child: Stack(
                   children: [
-                    // LoginTitle - Text - 로그인 후
-                    Row(
-                      children: [
-                        Text('로그인', style: TextStyle(fontSize: 25, color: Colors.white, letterSpacing: -0.5, fontWeight: FontWeight.w800)),
-                        Text(' 후',
-                            style: TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white,
-                              letterSpacing: -0.5,
-                            )),
-                      ],
+                    // Title 애니메이션
+                    AnimatedPositioned(
+                      duration: const Duration(milliseconds: 500),
+                      left: _isAnimate ? mq.width * .1 : mq.width * 1,
+                      child: Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // LoginTitle - Text - "로그인 후"
+                            const Row(
+                              children: [
+                                Text('로그인', style: TextStyle(fontSize: 25, color: Colors.white, letterSpacing: -0.5, fontWeight: FontWeight.w800)),
+                                Text(' 후',
+                                    style: TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.white,
+                                      letterSpacing: -0.5,
+                                    )),
+                              ],
+                            ),
+                            // 공백 박스
+                            SizedBox(
+                              height: mq.height * .005,
+                            ),
+                            // LoginTitle - Text - "이용이"
+                            const Text('이용이',
+                                style: TextStyle(
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white,
+                                  letterSpacing: -0.5,
+                                )),
+                            // 공백 박스
+                            SizedBox(
+                              height: mq.height * .005,
+                            ),
+                            // LoginTitle - Text - "가능합니다."
+                            const Text('가능합니다.',
+                                style: TextStyle(
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white,
+                                  letterSpacing: -0.5,
+                                )),
+                          ],
+                        ),
+                      ),
                     ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    // LoginTitle - Text - 이용이
-                    Text('이용이',
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white,
-                          letterSpacing: -0.5,
-                        )),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    // LoginTitle - Text - 가능합니다.
-                    Text('가능합니다.',
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white,
-                          letterSpacing: -0.5,
-                        )),
                   ],
                 ),
-              )),
-          // ┏━━━━━━━━━━━━━━━━━━━━━┓
-          // ┃  Body - LoginBtn    ┃
-          // ┗━━━━━━━━━━━━━━━━━━━━━┛
-          Positioned(
-              left: mq.width * 0.05,
-              bottom: mq.height * 0.15,
-              width: mq.width * 0.9,
-              height: mq.height * 0.06,
-              child: ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white, // Btn-BackgroundColor
-                    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15))), // Btn-Shape
-                  ),
-                  onPressed: () {
-                    _handleLoginBtnClick(); // LoginBtn-ClickEvent
-                  },
-                  // LoginBtn-Element
-                  icon: Image.asset('assets/images/google.png'),
-                  label: RichText(
-                    text: const TextSpan(
-                        style: TextStyle(color: Colors.black, fontSize: 16),
-                        children: [TextSpan(text: '구글 아이디로 '), TextSpan(text: '로그인', style: TextStyle(fontWeight: FontWeight.w500))]),
-                  )))
-        ],
-      ),
-    );
+              ),
+              // 공백 박스
+              SizedBox(
+                height: mq.height * .3,
+              ),
+              // ┏━━━━━━━━━━━━━━━━━━━━━┓
+              // ┃  Body - LoginBtn    ┃
+              // ┗━━━━━━━━━━━━━━━━━━━━━┛
+              SizedBox(
+                  width: mq.width * 0.9,
+                  height: mq.height * 0.06,
+                  child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white, // Btn-BackgroundColor
+                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15))), // Btn-Shape
+                      ),
+                      onPressed: () {
+                        _handleLoginBtnClick(); // LoginBtn-ClickEvent
+                      },
+                      // LoginBtn-Element
+                      icon: Image.asset('assets/images/google.png'),
+                      label: RichText(
+                        text: const TextSpan(
+                            style: TextStyle(color: Colors.black, fontSize: 16),
+                            children: [TextSpan(text: '구글 아이디로 '), TextSpan(text: '로그인', style: TextStyle(fontWeight: FontWeight.w500))]),
+                      )))
+            ],
+          ),
+        ));
   }
 }

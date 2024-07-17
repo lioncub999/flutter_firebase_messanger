@@ -5,10 +5,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:modu_messenger_firebase/helper/custom_dialogs.dart';
 import 'package:modu_messenger_firebase/screens/auth/login_screen.dart';
 import 'package:modu_messenger_firebase/screens/chat/chat_screen.dart';
+import 'package:modu_messenger_firebase/ttestt/test_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import '../api/apis.dart';
+import '../api/chat_apis.dart';
 import '../main.dart';
 import 'common/bottom_navbar.dart';
 
@@ -60,9 +62,9 @@ class _HomeScreenState extends State<HomeScreen> {
         // ┗━━━━━━━━━━━┛
         body: [
           // 토크 화면 (tapState = 0)
-          const Center(child: Text('1번째 탭')),
+          TtestTScreen(),
           // 내주변 화면 (tapState = 1)
-          Center(child: SvgPicture.asset('assets/icons/talkIcon.svg')),
+          Center(child: SvgPicture.asset('assets/icons/locationIcon.svg')),
           // 채팅 화면 (tapState = 2)
           const ChatScreen(),
           // 더보기 화면 (tapState = 3)
