@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -9,6 +10,7 @@ import 'package:modu_messenger_firebase/widgets/chat_user_card.dart';
 import '../../api/apis.dart';
 import '../../main.dart';
 import '../../models/chat_user_model.dart';
+import '../../models/message_model.dart';
 
 // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 // ┃                                    ChatScreen                                    ┃
@@ -22,10 +24,7 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   // _ChatList <채팅방 리스트 데이터> 초기화
-  List<ChatUser> _chatUserList = [];
-
-  // _searchCatList 초기화
-  final List<ChatUser> _searchChatList = [];
+  late List<Message> chatRoomList = [];
 
   // 편집 status
   bool _isEditing = false;
@@ -112,37 +111,54 @@ class _ChatScreenState extends State<ChatScreen> {
         width: mq.width,
         height: mq.height,
         color: const Color.fromRGBO(56, 56, 60, 1), // chat background
-        child: StreamBuilder(
+        child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
             // 전체 유저 가져오기 (내가 포함된 채팅방만 가져오도록 수정 필요)
-            stream: ChatAPIs.getAllUsers(),
-            builder: (context, snapshot) {
-              switch (snapshot.connectionState) {
+            stream: ChatAPIs.getMyChatRoomId(),
+            builder: (context, chatRoomsSnapshot) {
+              switch (chatRoomsSnapshot.connectionState) {
                 case ConnectionState.waiting:
                 case ConnectionState.none:
                   return const Center(child: CircularProgressIndicator());
                 case ConnectionState.active:
                 case ConnectionState.done:
-                  final data = snapshot.data?.docs;
+                  final data = chatRoomsSnapshot.data?.docs;
+                  // chatRoom
+                  print(chatRoomList);
+                  chatRoomList = data?.map((e) => Message.fromJson(e.data())).toList() ?? [];
+                  chatRoomList.sort((a, b) => b.lastSendTime.compareTo(a.lastSendTime));
 
-                  // API로 받아온 데이터 ChatUserList 에 저장
-                  _chatUserList = data?.map((e) => ChatUser.fromJson(e.data())).toList() ?? [];
-                  if (_chatUserList.isNotEmpty) {
-                    return ListView.builder(
-                      // 전체 대화 리스트
-                      itemCount: _chatUserList.length,
-                      padding: EdgeInsets.only(top: mq.height * 0.01),
+                  return ListView.builder(
+                      itemCount: chatRoomList.length,
                       itemBuilder: (context, index) {
-                        return ChatUserCard(user: _chatUserList[index]);
-                      },
-                    );
-                  } else {
-                    return const Center(
-                      child: Text("채팅이 없습니다."),
-                    );
-                  }
+                        ChatUser chatUser = ChatUser(
+                            image: '', about: '', name: '', createdAt: '', isOnline: false, id: '', lastActive: '', email: '', pushToken: '');
+                        if (chatRoomList[index].member[0] == APIs.me.id) {
+                          chatUser.id = chatRoomList[index].member[1];
+                        } else {
+                          chatUser.id = chatRoomList[index].member[0];
+                        }
+                        return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                            stream: APIs.getUserInfo(chatUser),
+                            builder: (context, userSnapshot) {
+                              switch (userSnapshot.connectionState) {
+                                case ConnectionState.waiting:
+                                case ConnectionState.none:
+                                  return const Center(child: CircularProgressIndicator());
+                                case ConnectionState.active:
+                                case ConnectionState.done:
+                                  final data = userSnapshot.data?.docs;
+                                  List<ChatUser> users = data?.map((e) => ChatUser.fromJson(e.data())).toList() ?? [];
+                                  if (users.isNotEmpty) {
+                                    // return Text(chatRoomList[index].lastSendTime.toString());
+                                    return ChatUserCard(user: users[0]);
+                                  } else {
+                                    return Text("값이 없s음");
+                                  }
+                              }
+                            });
+                      });
               }
-            }
-            ),
+            }),
       ),
     );
   }

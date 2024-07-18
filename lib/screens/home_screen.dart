@@ -62,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
         // ┗━━━━━━━━━━━┛
         body: [
           // 토크 화면 (tapState = 0)
-          TtestTScreen(),
+          testttt(),
           // 내주변 화면 (tapState = 1)
           Center(child: SvgPicture.asset('assets/icons/locationIcon.svg')),
           // 채팅 화면 (tapState = 2)

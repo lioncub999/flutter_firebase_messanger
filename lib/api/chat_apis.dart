@@ -62,10 +62,13 @@ class ChatAPIs {
   static Future<void> sendMessage(ChatUser chatUser, String msg, Type type) async {
     final time = DateTime.now().millisecondsSinceEpoch.toString();
 
-    final Message message = Message(chatRoomId: 'test' ,told: chatUser.id, type: type, msg: msg, read: '', fromId: APIs.user.uid, sent: time);
+    final Message message = Message(chatRoomId: 'test' , member: [] ,told: chatUser.id, type: type, msg: msg, read: '', fromId: APIs.user.uid, sent: time, lastSendTime: time);
 
     final ref = APIs.fireStore.collection('chats/${getConversationId(chatUser.id)}/messages/');
     await ref.doc(time).set(message.toJson());
+
+    final ref2 = APIs.fireStore.collection('chatrooms');
+    await ref2.doc(getConversationId(chatUser.id)).update({'lastSendTime' : time});
   }
 
   // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
