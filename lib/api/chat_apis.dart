@@ -19,15 +19,20 @@ class ChatAPIs {
     return APIs.fireStore.collection('users').where('id', isNotEqualTo: APIs.user.uid).snapshots();
   }
 
-  static Future<QuerySnapshot<Map<String, dynamic>>> getChatRooms() {
+  // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+  // ┃   ● 내가 포함된 채팅방 아이디 조회                                  ┃
+  // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getMyChatRoomId() {
     return APIs.fireStore
         .collection('chatrooms')
-        .where('member', arrayContains: 'd1pVU4ywmKcSqYjaXRUUrkxmyFi2')
-        .get();
+        .where('member', arrayContains: APIs.user.uid)
+        .snapshots();
   }
 
+  // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+  // ┃   ● 채팅방 아이디로 마지막 메시지 가져오기                          ┃
+  // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
   static Stream<QuerySnapshot<Map<String, dynamic>>> getLatestMessage(String chatRoomId) {
-    print(chatRoomId);
     return APIs.fireStore
         .collection('chats/$chatRoomId/messages')
         .orderBy('sent', descending: true)

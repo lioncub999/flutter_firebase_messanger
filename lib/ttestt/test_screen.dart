@@ -2,8 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:modu_messenger_firebase/api/chat_apis.dart';
 
-import '../main.dart';
-import '../models/chat_user_model.dart';
 import '../models/message_model.dart';
 
 class TtestTScreen extends StatefulWidget {
@@ -14,48 +12,68 @@ class TtestTScreen extends StatefulWidget {
 }
 
 class _TtestTScreenState extends State<TtestTScreen> {
+  List<String> chatRoomList = [];
+
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
-      future: ChatAPIs.getChatRooms(),
+    return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+      stream: ChatAPIs.getMyChatRoomId(),
       builder: (context, chatRoomsSnapshot) {
-        if (chatRoomsSnapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
-        }
+        switch (chatRoomsSnapshot.connectionState) {
+          case ConnectionState.waiting:
+          case ConnectionState.none:
+            return const Center(child: CircularProgressIndicator());
+          case ConnectionState.active:
+          case ConnectionState.done:
+            final data = chatRoomsSnapshot.data?.docs;
+            List<Message> list = data?.map((e) => Message.fromJson(e.data())).toList() ?? [];
 
-        if (chatRoomsSnapshot.hasError) {
-          return Text('Error: ${chatRoomsSnapshot.error}');
-        }
+            if (list.isNotEmpty) {
+              // chatRoomList를 초기화하고 다시 채웁니다.
+              chatRoomList.clear();
+              chatRoomList.addAll(chatRoomsSnapshot.data!.docs.map((e) => e.id));
 
-        if (!chatRoomsSnapshot.hasData || chatRoomsSnapshot.data!.docs.isEmpty) {
-          return Text('No chat rooms found');
-        }
+              return ListView.builder(
+                itemCount: chatRoomList.length,
+                itemBuilder: (context, index) {
+                  var chatRoomId = chatRoomList[index];
+                  return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                    stream: ChatAPIs.getLatestMessage(chatRoomId),
+                    builder: (context, messagesSnapshot) {
+                      switch (messagesSnapshot.connectionState) {
+                        case ConnectionState.waiting:
+                        case ConnectionState.none:
+                          return const Center(child: CircularProgressIndicator());
+                        case ConnectionState.active:
+                        case ConnectionState.done:
+                          final data = messagesSnapshot.data?.docs;
+                          List<Message> list = data?.map((e) => Message.fromJson(e.data())).toList() ?? [];
 
-        // Assuming you want to get the first chat room
-        var chatRoomId = chatRoomsSnapshot.data!.docs[0].id;
+                          // 메시지를 시간 순서대로 정렬합니다.
+                          list.sort((a, b) => b.sent.compareTo(a.sent));
 
-        return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-          stream: ChatAPIs.getLatestMessage(chatRoomId),
-          builder: (context, messagesSnapshot) {
-            switch (messagesSnapshot.connectionState) {
-              case ConnectionState.waiting:
-              case ConnectionState.none:
-                return const Center(child: CircularProgressIndicator());
-              case ConnectionState.active:
-              case ConnectionState.done:
-                final data = messagesSnapshot.data?.docs;
-                List<Message> list = data?.map((e) => Message.fromJson(e.data())).toList() ?? [];
-
-                if (list.isNotEmpty) {
-                  return Center(child: Text(list[0].));
-                } else {
-                  return const Center(
-                    child: Text("채팅이 없습니다."),
+                          if (list.isNotEmpty) {
+                            return ListTile(
+                              title: Text('Chat Room: $chatRoomId'),
+                              subtitle: Text(list[0].msg),
+                            );
+                          } else {
+                            return ListTile(
+                              title: Text('Chat Room: $chatRoomId'),
+                              subtitle: const Text("채팅이 없습니다."),
+                            );
+                          }
+                      }
+                    },
                   );
-                }
+                },
+              );
+            } else {
+              return const Center(
+                child: Text("채팅이 없습니다."),
+              );
             }
-          },
-        );
+        }
       },
     );
   }
