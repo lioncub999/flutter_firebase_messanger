@@ -19,9 +19,20 @@ class ChatAPIs {
     return APIs.fireStore.collection('users').where('id', isNotEqualTo: APIs.user.uid).snapshots();
   }
 
-  static Stream<QuerySnapshot<Map<String, dynamic>>> getMyChatRoom() {
+  static Future<QuerySnapshot<Map<String, dynamic>>> getChatRooms() {
+    return APIs.fireStore
+        .collection('chatrooms')
+        .where('member', arrayContains: 'd1pVU4ywmKcSqYjaXRUUrkxmyFi2')
+        .get();
+  }
 
-    return APIs.fireStore.collection('chats').doc('d1pVU4ywmKcSqYjaXRUUrkxmyFi2_l4Pb90CHKtR7GHcNwsghn27K1Sd2').collection('messages').where('fromId', isEqualTo: 'l4Pb90CHKtR7GHcNwsghn27K1Sd2').snapshots();
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getLatestMessage(String chatRoomId) {
+    print(chatRoomId);
+    return APIs.fireStore
+        .collection('chats/$chatRoomId/messages')
+        .orderBy('sent', descending: true)
+        .limit(1)
+        .snapshots();
   }
 
   // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
@@ -46,7 +57,7 @@ class ChatAPIs {
   static Future<void> sendMessage(ChatUser chatUser, String msg, Type type) async {
     final time = DateTime.now().millisecondsSinceEpoch.toString();
 
-    final Message message = Message(told: chatUser.id, type: type, msg: msg, read: '', fromId: APIs.user.uid, sent: time);
+    final Message message = Message(chatRoomId: 'test' ,told: chatUser.id, type: type, msg: msg, read: '', fromId: APIs.user.uid, sent: time);
 
     final ref = APIs.fireStore.collection('chats/${getConversationId(chatUser.id)}/messages/');
     await ref.doc(time).set(message.toJson());
