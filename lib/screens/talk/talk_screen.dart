@@ -1,15 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:modu_messenger_firebase/api/chat_apis.dart';
 import 'package:modu_messenger_firebase/api/talk_apis.dart';
-import 'package:modu_messenger_firebase/screens/chat/chat_search_screen.dart';
-import 'package:modu_messenger_firebase/screens/profile/profile_screen.dart';
-import 'package:modu_messenger_firebase/widgets/chat_user_card.dart';
+import 'package:modu_messenger_firebase/widgets/talk_card.dart';
 
-import '../../api/apis.dart';
 import '../../api/user_apis.dart';
 import '../../main.dart';
-import '../../models/chat_model.dart';
 import '../../models/talk_model.dart';
 import '../../models/user_model.dart';
 
@@ -70,9 +64,19 @@ class _TalkScreenState extends State<TalkScreen> {
                   scrollDirection: Axis.horizontal,
                   itemCount: 50,
                   itemBuilder: (context, index) {
-                    return Text("asd  ", style: TextStyle(color: Colors.red),);
+                    return const Text("스토리  ", style: TextStyle(color: Colors.red),);
                   },
                 )),
+            Container(
+              color: Colors.yellow,
+              width: mq.width,
+              height: 50,
+              child: const Row(
+                children: [
+                  Text("말풍선들")
+                ],
+              ),
+            ),
             Expanded(
                 child: Container(
                     color: const Color.fromRGBO(56, 56, 60, 1),
@@ -113,10 +117,7 @@ class _TalkScreenState extends State<TalkScreen> {
                                             List<ModuUser> users = data?.map((e) => ModuUser.fromJson(e.data())).toList() ?? [];
                                             if (_talkList.isNotEmpty) {
                                               if (users.isNotEmpty) {
-                                                return Text(
-                                                  "${users[0].name} + ${_talkList[index].cont}",
-                                                  style: TextStyle(color: Colors.white),
-                                                );
+                                                return TalkCard(user: users[0], talk : _talkList[index]);
                                               } else {
                                                 print(_talkList[index].creUserId);
                                                 return const Center(
