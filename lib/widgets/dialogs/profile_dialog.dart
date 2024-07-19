@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:modu_messenger_firebase/screens/profile/view_profile_screen.dart';
 
 import '../../main.dart';
-import '../../models/chat_user_model.dart';
+import '../../models/chat_model.dart';
+import '../../models/user_model.dart';
 
 class ProfileDialog extends StatelessWidget {
   const ProfileDialog({super.key, required this.user});
 
-  final ChatUser user;
+  final ModuUser user;
 
   @override
   Widget build(BuildContext context) {

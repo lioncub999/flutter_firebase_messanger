@@ -1,8 +1,8 @@
 // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-// ┃                                  ChatUserModel                                   ┃
+// ┃                                  UserModel                                   ┃
 // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
-class ChatUser {
-  ChatUser({
+class ModuUser {
+  ModuUser({
     required this.image,
     required this.about,
     required this.name,
@@ -23,7 +23,7 @@ class ChatUser {
   late String email;
   late String pushToken;
 
-  ChatUser.fromJson(Map<String, dynamic> json) {
+  ModuUser.fromJson(Map<String, dynamic> json) {
     image = json['image'] ?? '';
     about = json['about'] ?? '';
     name = json['name'] ?? '';

@@ -9,7 +9,8 @@ import 'package:modu_messenger_firebase/models/message_model.dart';
 import 'package:modu_messenger_firebase/widgets/dialogs/profile_dialog.dart';
 
 import '../main.dart';
-import '../models/chat_user_model.dart';
+import '../models/chat_model.dart';
+import '../models/user_model.dart';
 import '../screens/chat/chat_room_screen.dart';
 
 // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
@@ -18,7 +19,7 @@ import '../screens/chat/chat_room_screen.dart';
 class ChatUserCard extends StatefulWidget {
   const ChatUserCard({super.key, required this.user});
 
-  final ChatUser user;
+  final ModuUser user;
 
   @override
   State<ChatUserCard> createState() => _ChatUserCardState();

@@ -4,7 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:modu_messenger_firebase/models/chat_user_model.dart';
+import 'package:modu_messenger_firebase/models/chat_model.dart';
+import 'package:modu_messenger_firebase/models/user_model.dart';
 
 // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 // ┃                                                                                                    ┃
@@ -15,7 +16,7 @@ class APIs {
   // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
   // ┃   내 정보 - me                                                      ┃
   // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
-  static late ChatUser me;
+  static late ModuUser me;
 
   // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
   // ┃   현재 접속 유저 - user                                             ┃
@@ -49,7 +50,7 @@ class APIs {
   static Future<void> getSelfInfo() async {
     return fireStore.collection('CL_USER').doc(user.uid).get().then((user) async {
       if (user.exists) {
-        me = ChatUser.fromJson(user.data()!);
+        me = ModuUser.fromJson(user.data()!);
         await getFirebaseMessagingToken();
 
         APIs.updateActiveStatus(true);
@@ -72,7 +73,7 @@ class APIs {
   static Future<void> createUser() async {
     final time = DateTime.now().millisecondsSinceEpoch.toString();
 
-    final chatUser = ChatUser(
+    final moduUser = ModuUser(
         id: user!.uid,
         name: user!.displayName.toString(),
         about: "hi",
@@ -83,7 +84,7 @@ class APIs {
         pushToken: '',
         email: user!.email.toString());
 
-    return await fireStore.collection('CL_USER').doc(user.uid).set(chatUser.toJson());
+    return await fireStore.collection('CL_USER').doc(user.uid).set(moduUser.toJson());
   }
 
   // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓

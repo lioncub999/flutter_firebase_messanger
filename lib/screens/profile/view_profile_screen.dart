@@ -13,12 +13,13 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../../api/apis.dart';
 import '../../main.dart';
-import '../../models/chat_user_model.dart';
+import '../../models/chat_model.dart';
+import '../../models/user_model.dart';
 
 class ViewProfileScreen extends StatefulWidget {
   const ViewProfileScreen({super.key, required this.user});
 
-  final ChatUser user;
+  final ModuUser user;
 
   @override
   State<ViewProfileScreen> createState() => _ViewProfileScreenState();

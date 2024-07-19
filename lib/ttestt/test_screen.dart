@@ -1,17 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:modu_messenger_firebase/api/chat_apis.dart';
-import 'package:modu_messenger_firebase/api/user_apis.dart';
-import 'package:modu_messenger_firebase/screens/chat/chat_search_screen.dart';
-import 'package:modu_messenger_firebase/screens/profile/profile_screen.dart';
-import 'package:modu_messenger_firebase/widgets/chat_user_card.dart';
-
-import '../../api/apis.dart';
-import '../../main.dart';
-import '../../models/chat_user_model.dart';
-import '../../models/message_model.dart';
+import '../../models/chat_model.dart';
+import '../models/user_model.dart';
 
 // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 // ┃                                    ChatScreen                                    ┃
@@ -28,7 +17,7 @@ class _testtttState extends State<testttt> {
   late List<String> chatRoomList;
   late List<dynamic> chatMemberList;
   late List<String> chatMemberIdList = [];
-  late List<ChatUser> myChatUserList = [];
+  late List<ModuUser> myChatUserList = [];
 
   // 편집 status
   bool _isEditing = false;
@@ -57,7 +46,7 @@ class _testtttState extends State<testttt> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title : Text("테스트용")),
+      appBar: AppBar(title: Text("테스트용")),
       body: Text("테스트"),
     );
   }

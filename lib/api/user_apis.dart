@@ -2,8 +2,9 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import '../models/chat_user_model.dart';
+import '../models/chat_model.dart';
 import '../models/message_model.dart';
+import '../models/user_model.dart';
 import 'apis.dart';
 
 // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
@@ -16,7 +17,7 @@ class UserAPIs {
   // ┃   ● 특정 유저 정보 조회                                             ┃
   // ┃      - parameterType : ChatUser                                     ┃
   // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
-  static Stream<QuerySnapshot<Map<String, dynamic>>> getUserInfo(ChatUser chatUser) {
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getUserInfo(ModuUser chatUser) {
     return APIs.fireStore.collection('CL_USER').where('id', isEqualTo: chatUser.id).snapshots();
   }
 

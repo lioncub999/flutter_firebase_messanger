@@ -8,8 +8,8 @@ import 'package:modu_messenger_firebase/widgets/chat_user_card.dart';
 import '../../api/apis.dart';
 import '../../api/user_apis.dart';
 import '../../main.dart';
-import '../../models/chat_room_model.dart';
-import '../../models/chat_user_model.dart';
+import '../../models/chat_model.dart';
+import '../../models/user_model.dart';
 
 // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 // ┃                                    ChatScreen                                    ┃
@@ -22,24 +22,11 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  // _ChatList <채팅방 리스트 데이터> 초기화
-  late List<ChatRoom> chatRoomList = [];
+  // <내가 id가 포함된 채팅방 리스트 데이터> 초기화
+  late List<ChatRoom> _chatRoomList = [];
 
   // 편집 status
   bool _isEditing = false;
-
-  // FocusNode 초기화
-  final FocusNode _searchFocusNode = FocusNode();
-
-  // ┏━━━━━━━━━━━━━┓
-  // ┃   dispose   ┃
-  // ┗━━━━━━━━━━━━━┛
-  @override
-  void dispose() {
-    // FocusNode 해제
-    _searchFocusNode.dispose();
-    super.dispose();
-  }
 
   // ┏━━━━━━━━━━━━━━━┓
   // ┃   initState   ┃
@@ -110,8 +97,11 @@ class _ChatScreenState extends State<ChatScreen> {
         width: mq.width,
         height: mq.height,
         color: const Color.fromRGBO(56, 56, 60, 1), // chat background
+
+        // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+        // ┃   Body - StreamBuilder - 1. 내가 포함된 채팅방만 가져와서 _chatRoomList 에 저장 후 시간 순으로 정렬  ┃
+        // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
         child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-            // 내가 포함된 채팅방만 가져오기
             stream: ChatAPIs.getMyChatRooms(),
             builder: (context, chatRoomsSnapshot) {
               switch (chatRoomsSnapshot.connectionState) {
@@ -121,21 +111,30 @@ class _ChatScreenState extends State<ChatScreen> {
                 case ConnectionState.active:
                 case ConnectionState.done:
                   final data = chatRoomsSnapshot.data?.docs;
-                  // chatRoom
-                  chatRoomList = data?.map((e) => ChatRoom.fromJson(e.data())).toList() ?? [];
-                  chatRoomList.sort((a, b) => b.lastMsgDtm.compareTo(a.lastMsgDtm));
+                  _chatRoomList = data?.map((e) => ChatRoom.fromJson(e.data())).toList() ?? [];
+                  _chatRoomList.sort((a, b) => b.lastMsgDtm.compareTo(a.lastMsgDtm));
 
+                  // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+                  // ┃   Body - ListView.builder - 2. 받아온 채팅방 리스트의 member 리스트에서 내가 아닌 상대방 ID 가져와서 유저 정보 조회를 위한 ChatUser 생성 ┃
+                  // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
                   return ListView.builder(
                       padding: EdgeInsets.only(top: mq.height * .005),
-                      itemCount: chatRoomList.length,
+                      itemCount: _chatRoomList.length,
                       itemBuilder: (context, index) {
-                        ChatUser chatUser = ChatUser(
+                        // 채팅방은 무조건 나를 포함 하여 두명인 것으로 고정
+                        ModuUser chatUser = ModuUser(
                             image: '', about: '', name: '', createdAt: '', isOnline: false, id: '', lastActive: '', email: '', pushToken: '');
-                        if (chatRoomList[index].member[0] == APIs.me.id) {
-                          chatUser.id = chatRoomList[index].member[1];
-                        } else {
-                          chatUser.id = chatRoomList[index].member[0];
+                        // chatRoomList 의 member 리스트의 첫번째 ID가 나면 두번째 ID를 조회 parameter 저장
+                        if (_chatRoomList[index].member[0] == APIs.me.id) {
+                          chatUser.id = _chatRoomList[index].member[1];
                         }
+                        // chatRoomList 의 member 리스트의 두번째 ID가 나면 첫번째 ID를 조회 parameter 저장
+                        else {
+                          chatUser.id = _chatRoomList[index].member[0];
+                        }
+                        // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+                        // ┃   Body - StreamBuilder - 3. 위에서 넣은 chatUser.id 로 유저 정보 조회 하여 ChatUserCard 생성   ┃
+                        // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
                         return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                             stream: UserAPIs.getUserInfo(chatUser),
                             builder: (context, userSnapshot) {
@@ -146,11 +145,15 @@ class _ChatScreenState extends State<ChatScreen> {
                                 case ConnectionState.active:
                                 case ConnectionState.done:
                                   final data = userSnapshot.data?.docs;
-                                  List<ChatUser> users = data?.map((e) => ChatUser.fromJson(e.data())).toList() ?? [];
+                                  List<ModuUser> users = data?.map((e) => ModuUser.fromJson(e.data())).toList() ?? [];
                                   if (users.isNotEmpty) {
                                     return ChatUserCard(user: users[0]);
                                   } else {
-                                    return Text("값이 없음");
+                                    return const Center(
+                                        child: Text(
+                                      "채팅 내역이 없습니다",
+                                      style: TextStyle(color: Colors.white),
+                                    ));
                                   }
                               }
                             });

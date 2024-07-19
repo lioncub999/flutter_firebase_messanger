@@ -8,8 +8,9 @@ import 'package:modu_messenger_firebase/widgets/message_card.dart';
 
 import '../../api/chat_apis.dart';
 import '../../main.dart';
-import '../../models/chat_user_model.dart';
+import '../../models/chat_model.dart';
 import '../../models/message_model.dart';
+import '../../models/user_model.dart';
 
 // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 // ┃                                  ChatRoomScreen                                  ┃
@@ -17,7 +18,7 @@ import '../../models/message_model.dart';
 class ChatRoomScreen extends StatefulWidget {
   const ChatRoomScreen({super.key, required this.user});
 
-  final ChatUser user;
+  final ModuUser user;
 
   @override
   State<ChatRoomScreen> createState() => _ChatRoomScreenState();

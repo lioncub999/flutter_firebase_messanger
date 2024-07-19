@@ -3,17 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:modu_messenger_firebase/api/apis.dart';
 import 'package:modu_messenger_firebase/helper/custom_date_util.dart';
-import 'package:modu_messenger_firebase/models/chat_user_model.dart';
+import 'package:modu_messenger_firebase/models/chat_model.dart';
 
 import '../api/chat_apis.dart';
 import '../main.dart';
 import '../models/message_model.dart';
+import '../models/user_model.dart';
 
 class MessageCard extends StatefulWidget {
   const MessageCard({super.key, required this.message, required this.user});
 
   final Message message;
-  final ChatUser user;
+  final ModuUser user;
 
   @override
   State<MessageCard> createState() => _MessageCardState();
