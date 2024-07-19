@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:modu_messenger_firebase/helper/custom_dialogs.dart';
 import 'package:modu_messenger_firebase/screens/auth/login_screen.dart';
 import 'package:modu_messenger_firebase/screens/chat/chat_screen.dart';
+import 'package:modu_messenger_firebase/screens/talk/talk_screen.dart';
 import 'package:modu_messenger_firebase/ttestt/test_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -62,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
         // ┗━━━━━━━━━━━┛
         body: [
           // 토크 화면 (tapState = 0)
-          testttt(),
+          TalkScreen(),
           // 내주변 화면 (tapState = 1)
           Center(child: SvgPicture.asset('assets/icons/locationIcon.svg')),
           // 채팅 화면 (tapState = 2)

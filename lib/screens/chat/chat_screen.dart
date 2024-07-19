@@ -45,7 +45,7 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: AppBar(
         // Appbar - title 검색
         title: const Text("쪽지"),
-        // Appbar - actions
+        // Appbar - leading
         leading: TextButton(
             onPressed: () {
               setState(() {
@@ -151,7 +151,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                   } else {
                                     return const Center(
                                         child: Text(
-                                      "채팅 내역이 없습니다",
+                                      "유저가 존재 하지 않습니다.",
                                       style: TextStyle(color: Colors.white),
                                     ));
                                   }
