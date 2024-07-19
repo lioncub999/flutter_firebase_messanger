@@ -21,6 +21,9 @@ class _TalkScreenState extends State<TalkScreen> {
   // <토크 리스트> 초기화
   late List<Talk> _talkList = [];
 
+  // 키워드 검색 필터
+  late bool _filterFriend = false;
+
   // ┏━━━━━━━━━━━━━━━┓
   // ┃   initState   ┃
   // ┗━━━━━━━━━━━━━━━┛
@@ -36,17 +39,17 @@ class _TalkScreenState extends State<TalkScreen> {
       // ┃   AppBar   ┃
       // ┗━━━━━━━━━━━━┛
       appBar: AppBar(
-        // Appbar - title 검색
+          // Appbar - title 검색
           title: const Text("토크"),
           // Appbar - leading
           leading: Row(
             children: [
               // 단체 쪽지 전송
-              IconButton(onPressed: () {}, icon: Icon(Icons.message))
+              IconButton(onPressed: () {}, icon: const Icon(Icons.message))
             ],
           ),
           // Appbar - actions
-          actions: [
+          actions: const [
             // Appbar - actions - 검색 버튼
           ]),
       // ┏━━━━━━━━━━┓
@@ -64,19 +67,59 @@ class _TalkScreenState extends State<TalkScreen> {
                   scrollDirection: Axis.horizontal,
                   itemCount: 50,
                   itemBuilder: (context, index) {
-                    return const Text("스토리  ", style: TextStyle(color: Colors.red),);
+                    return const Text(
+                      "스토리  ",
+                      style: TextStyle(color: Colors.red),
+                    );
                   },
                 )),
+            // 키워드 필터 ( 구현 예정 )
             Container(
-              color: Colors.yellow,
+              color: const Color.fromRGBO(56, 56, 60, 1),
+              padding: EdgeInsets.symmetric(horizontal: 20),
               width: mq.width,
-              height: 50,
-              child: const Row(
+              height: 60,
+              child: Row(
                 children: [
-                  Text("말풍선들")
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          _filterFriend = !_filterFriend;
+                        });
+                      },
+                      child: Container(
+                        height: 35,
+                        padding: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                            color: _filterFriend ? Color.fromRGBO(232, 232, 232, 1) : Color.fromRGBO(92, 97, 103, 1),
+                            borderRadius:
+                                BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15), bottomRight: Radius.circular(15))),
+                        child:
+                            Text("#친구", style: TextStyle(color: _filterFriend ? const Color.fromRGBO(92, 97, 103, 1) : Colors.white, fontSize: 12)),
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {},
+                    child: Container(
+                      height: 35,
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                          color: Color.fromRGBO(92, 97, 103, 1),
+                          borderRadius:
+                              BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15), bottomRight: Radius.circular(15))),
+                      child: Text(
+                        "#가까운",
+                        style: TextStyle(color: Colors.white, fontSize: 12),
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),
+            // 토크 리스트
             Expanded(
                 child: Container(
                     color: const Color.fromRGBO(56, 56, 60, 1),
@@ -117,21 +160,17 @@ class _TalkScreenState extends State<TalkScreen> {
                                             List<ModuUser> users = data?.map((e) => ModuUser.fromJson(e.data())).toList() ?? [];
                                             if (_talkList.isNotEmpty) {
                                               if (users.isNotEmpty) {
-                                                return TalkCard(user: users[0], talk : _talkList[index]);
+                                                return TalkCard(user: users[0], talk: _talkList[index]);
                                               } else {
                                                 print(_talkList[index].creUserId);
-                                                return const Center(
-                                                    child: Text(
-                                                      "유저가 존재 하지 않습니다.",
-                                                      style: TextStyle(color: Colors.white),
-                                                    ));
+                                                return const SizedBox();
                                               }
                                             } else {
                                               return const Center(
                                                   child: Text(
-                                                    "토크가 존재 하지 않습니다.",
-                                                    style: TextStyle(color: Colors.white),
-                                                  ));
+                                                "토크가 존재 하지 않습니다.",
+                                                style: TextStyle(color: Colors.white),
+                                              ));
                                             }
                                         }
                                       });
@@ -141,6 +180,10 @@ class _TalkScreenState extends State<TalkScreen> {
                     )))
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){},
+
       ),
     );
   }

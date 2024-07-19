@@ -43,7 +43,7 @@ void main() {
           splashFactory: NoSplash.splashFactory, // Ripple Effect 비활성화
           // AppBar-Theme
           appBarTheme: const AppBarTheme(
-              backgroundColor: const Color.fromRGBO(92, 97, 103, 1),
+              backgroundColor: Color.fromRGBO(92, 97, 103, 1),
               centerTitle: true,
               elevation: 1,
               titleTextStyle: TextStyle(

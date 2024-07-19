@@ -18,10 +18,7 @@ class ChatAPIs {
   // ┃     - CL_CHAT_ROOM doc 중 member 필드에 내 아이디 포함된 doc 가져옴     ┃
   // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
   static Stream<QuerySnapshot<Map<String, dynamic>>> getMyChatRooms() {
-    return APIs.fireStore
-        .collection('CL_CHAT_ROOM')
-        .where('member', arrayContains: APIs.user.uid)
-        .snapshots();
+    return APIs.fireStore.collection('CL_CHAT_ROOM').where('member', arrayContains: APIs.user.uid).snapshots();
   }
 
   // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
@@ -54,7 +51,7 @@ class ChatAPIs {
 
     // CL_CHAT_ROOM - 마지막 메시지 시간 업데이트
     final ref2 = APIs.fireStore.collection('CL_CHAT_ROOM');
-    await ref2.doc('DC_${getConversationId(chatUser.id)}').update({'last_msg_dtm' : time});
+    await ref2.doc('DC_${getConversationId(chatUser.id)}').update({'last_msg_dtm': time});
   }
 
   // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
