@@ -1,16 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:modu_messenger_firebase/api/chat_apis.dart';
 import 'package:modu_messenger_firebase/screens/chat/chat_search_screen.dart';
 import 'package:modu_messenger_firebase/screens/profile/profile_screen.dart';
 import 'package:modu_messenger_firebase/widgets/chat_user_card.dart';
 
 import '../../api/apis.dart';
+import '../../api/user_apis.dart';
 import '../../main.dart';
+import '../../models/chat_room_model.dart';
 import '../../models/chat_user_model.dart';
-import '../../models/message_model.dart';
 
 // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 // ┃                                    ChatScreen                                    ┃
@@ -24,7 +23,7 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   // _ChatList <채팅방 리스트 데이터> 초기화
-  late List<Message> chatRoomList = [];
+  late List<ChatRoom> chatRoomList = [];
 
   // 편집 status
   bool _isEditing = false;
@@ -112,8 +111,8 @@ class _ChatScreenState extends State<ChatScreen> {
         height: mq.height,
         color: const Color.fromRGBO(56, 56, 60, 1), // chat background
         child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-            // 전체 유저 가져오기 (내가 포함된 채팅방만 가져오도록 수정 필요)
-            stream: ChatAPIs.getMyChatRoomId(),
+            // 내가 포함된 채팅방만 가져오기
+            stream: ChatAPIs.getMyChatRooms(),
             builder: (context, chatRoomsSnapshot) {
               switch (chatRoomsSnapshot.connectionState) {
                 case ConnectionState.waiting:
@@ -123,11 +122,11 @@ class _ChatScreenState extends State<ChatScreen> {
                 case ConnectionState.done:
                   final data = chatRoomsSnapshot.data?.docs;
                   // chatRoom
-                  print(chatRoomList);
-                  chatRoomList = data?.map((e) => Message.fromJson(e.data())).toList() ?? [];
-                  chatRoomList.sort((a, b) => b.lastSendTime.compareTo(a.lastSendTime));
+                  chatRoomList = data?.map((e) => ChatRoom.fromJson(e.data())).toList() ?? [];
+                  chatRoomList.sort((a, b) => b.lastMsgDtm.compareTo(a.lastMsgDtm));
 
                   return ListView.builder(
+                      padding: EdgeInsets.only(top: mq.height * .005),
                       itemCount: chatRoomList.length,
                       itemBuilder: (context, index) {
                         ChatUser chatUser = ChatUser(
@@ -138,7 +137,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           chatUser.id = chatRoomList[index].member[0];
                         }
                         return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                            stream: APIs.getUserInfo(chatUser),
+                            stream: UserAPIs.getUserInfo(chatUser),
                             builder: (context, userSnapshot) {
                               switch (userSnapshot.connectionState) {
                                 case ConnectionState.waiting:
@@ -149,10 +148,9 @@ class _ChatScreenState extends State<ChatScreen> {
                                   final data = userSnapshot.data?.docs;
                                   List<ChatUser> users = data?.map((e) => ChatUser.fromJson(e.data())).toList() ?? [];
                                   if (users.isNotEmpty) {
-                                    // return Text(chatRoomList[index].lastSendTime.toString());
                                     return ChatUserCard(user: users[0]);
                                   } else {
-                                    return Text("값이 없s음");
+                                    return Text("값이 없음");
                                   }
                               }
                             });

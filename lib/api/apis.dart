@@ -43,24 +43,11 @@ class APIs {
   static FirebaseMessaging fMessaging = FirebaseMessaging.instance;
 
   // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-  // ┃   FireBase Messaging Token (메세지 푸시 토큰 -> me.pushToken)       ┃
-  // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
-  static Future<void> getFirebaseMessagingToken() async {
-    await fMessaging.requestPermission();
-    // 푸시토큰
-    // await fMessaging.getToken().then((t) {
-    //   if (t != null) {
-    //     me.pushToken = t;
-    //   }
-    // });
-  }
-
-  // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
   // ┃   현재 접속 유저 정보 - 없을시 DB에 새로운 유저 생성                ┃
   // ┃   HomeScreen 에서 로그인 정보로 DB 조회 후 me <- user               ┃
   // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
   static Future<void> getSelfInfo() async {
-    return fireStore.collection('users').doc(user.uid).get().then((user) async {
+    return fireStore.collection('CL_USER').doc(user.uid).get().then((user) async {
       if (user.exists) {
         me = ChatUser.fromJson(user.data()!);
         await getFirebaseMessagingToken();
@@ -73,18 +60,10 @@ class APIs {
   }
 
   // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-  // ┃   ● 특정 유저 정보 조회                                             ┃
-  // ┃      - parameterType : ChatUser                                     ┃
-  // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
-  static Stream<QuerySnapshot<Map<String, dynamic>>> getUserInfo(ChatUser chatUser) {
-    return fireStore.collection('users').where('id', isEqualTo: chatUser.id).snapshots();
-  }
-
-  // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
   // ┃   ● 로그인 정보가 DB에 있는지 확인                                  ┃
   // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
   static Future<bool> userExists() async {
-    return (await fireStore.collection('users').doc(user!.uid).get()).exists;
+    return (await fireStore.collection('CL_USER').doc(user!.uid).get()).exists;
   }
 
   // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
@@ -104,26 +83,7 @@ class APIs {
         pushToken: '',
         email: user!.email.toString());
 
-    return await fireStore.collection('users').doc(user.uid).set(chatUser.toJson());
-  }
-
-  // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-  // ┃   ● 유저 정보 업데이트 (name, about)                                ┃
-  // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
-  static Future<void> updateUserInfo() async {
-    await fireStore.collection('users').doc(user.uid).update({'name': me.name, 'about': me.about});
-  }
-
-  // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-  // ┃   ● 유저 프로필 사진 업데이트 (image)                               ┃
-  // ┃      - parameterType : File                                         ┃
-  // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
-  static Future<void> updateProfilePicture(File file) async {
-    final ext = file.path.split('.').last;
-    final ref = storage.ref().child('profile_pictures/${user.uid}.$ext');
-    await ref.putFile(file, SettableMetadata(contentType: 'image/$ext')).then((p0) {});
-    me.image = await ref.getDownloadURL();
-    await fireStore.collection('users').doc(user.uid).update({'image': me.image});
+    return await fireStore.collection('CL_USER').doc(user.uid).set(chatUser.toJson());
   }
 
   // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
@@ -132,8 +92,21 @@ class APIs {
   // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
   static Future<void> updateActiveStatus(bool isOnline) async {
     fireStore
-        .collection('users')
+        .collection('CL_USER')
         .doc(user.uid)
         .update({'is_online': isOnline, 'last_active': DateTime.now().millisecondsSinceEpoch.toString(), 'push_token': me.pushToken});
+  }
+
+  // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+  // ┃   FireBase Messaging Token (메세지 푸시 토큰 -> me.pushToken)       ┃
+  // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+  static Future<void> getFirebaseMessagingToken() async {
+    await fMessaging.requestPermission();
+    // 푸시토큰
+    // await fMessaging.getToken().then((t) {
+    //   if (t != null) {
+    //     me.pushToken = t;
+    //   }
+    // });
   }
 }

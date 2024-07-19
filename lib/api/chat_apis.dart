@@ -12,31 +12,14 @@ import 'apis.dart';
 // ┃                                                                                                    ┃
 // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 class ChatAPIs {
-  // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-  // ┃   ● 내 채팅방 조회                                                  ┃
-  // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
-  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllUsers() {
-    return APIs.fireStore.collection('users').where('id', isNotEqualTo: APIs.user.uid).snapshots();
-  }
-
-  // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-  // ┃   ● 내가 포함된 채팅방 아이디 조회                                  ┃
-  // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
-  static Stream<QuerySnapshot<Map<String, dynamic>>> getMyChatRoomId() {
+  // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+  // ┃   ● 내 채팅방 조회                                                      ┃
+  // ┃     - CL_CHAT_ROOM doc 중 member 필드에 내 아이디 포함된 doc 가져옴     ┃
+  // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getMyChatRooms() {
     return APIs.fireStore
-        .collection('chatrooms')
+        .collection('CL_CHAT_ROOM')
         .where('member', arrayContains: APIs.user.uid)
-        .snapshots();
-  }
-
-  // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-  // ┃   ● 채팅방 아이디로 마지막 메시지 가져오기                          ┃
-  // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
-  static Stream<QuerySnapshot<Map<String, dynamic>>> getLatestMessage(String chatRoomId) {
-    return APIs.fireStore
-        .collection('chats/$chatRoomId/messages')
-        .orderBy('sent', descending: true)
-        .limit(1)
         .snapshots();
   }
 
@@ -52,7 +35,7 @@ class ChatAPIs {
   // ┃     - parameterType : ChatUser                                       ┃
   // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllMessages(ChatUser user) {
-    return APIs.fireStore.collection('chats/${getConversationId(user.id)}/messages/').orderBy('sent', descending: true).snapshots();
+    return APIs.fireStore.collection('CL_CHAT/${getConversationId(user.id)}/messages/').orderBy('sent', descending: true).snapshots();
   }
 
   // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
@@ -62,13 +45,13 @@ class ChatAPIs {
   static Future<void> sendMessage(ChatUser chatUser, String msg, Type type) async {
     final time = DateTime.now().millisecondsSinceEpoch.toString();
 
-    final Message message = Message(chatRoomId: 'test' , member: [] ,told: chatUser.id, type: type, msg: msg, read: '', fromId: APIs.user.uid, sent: time, lastSendTime: time);
+    final Message message = Message(told: chatUser.id, type: type, msg: msg, read: '', fromId: APIs.user.uid, sent: time);
 
-    final ref = APIs.fireStore.collection('chats/${getConversationId(chatUser.id)}/messages/');
+    final ref = APIs.fireStore.collection('CL_CHAT/${getConversationId(chatUser.id)}/messages/');
     await ref.doc(time).set(message.toJson());
 
-    final ref2 = APIs.fireStore.collection('chatrooms');
-    await ref2.doc(getConversationId(chatUser.id)).update({'lastSendTime' : time});
+    final ref2 = APIs.fireStore.collection('CL_CHAT_ROOM');
+    await ref2.doc('DC_${getConversationId(chatUser.id)}').update({'last_msg_dtm' : time});
   }
 
   // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
@@ -90,7 +73,7 @@ class ChatAPIs {
   // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
   static Future<void> updateMessageReadStatus(Message message) async {
     APIs.fireStore
-        .collection('chats/${getConversationId(message.fromId)}/messages/')
+        .collection('CL_CHAT/${getConversationId(message.fromId)}/messages/')
         .doc(message.sent)
         .update({'read': DateTime.now().millisecondsSinceEpoch.toString()});
   }
@@ -100,6 +83,6 @@ class ChatAPIs {
   // ┃     - parameterType : ChatUser                                       ┃
   // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
   static Stream<QuerySnapshot<Map<String, dynamic>>> getLastMessage(ChatUser user) {
-    return APIs.fireStore.collection('chats/${getConversationId(user.id)}/messages/').orderBy('sent', descending: true).limit(1).snapshots();
+    return APIs.fireStore.collection('CL_CHAT/${getConversationId(user.id)}/messages/').orderBy('sent', descending: true).limit(1).snapshots();
   }
 }

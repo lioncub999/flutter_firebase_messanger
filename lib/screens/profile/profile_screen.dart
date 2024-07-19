@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:modu_messenger_firebase/api/user_apis.dart';
 import 'package:modu_messenger_firebase/helper/custom_dialogs.dart';
 import 'package:modu_messenger_firebase/screens/auth/login_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -62,7 +63,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       });
 
       CustomDialogs.showProgressBar(context);
-      await APIs.updateProfilePicture(File(_image!.path));
+      await UserAPIs.updateProfilePicture(File(_image!.path));
       Navigator.pop(context);
       Navigator.pop(context);
     }
@@ -109,7 +110,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         setState(() {
           _image = pickedFile;
         });
-        await APIs.updateProfilePicture(File(_image!.path));
+        await UserAPIs.updateProfilePicture(File(_image!.path));
       }
       Navigator.pop(context);
     } else if (status.isDenied) {
@@ -269,7 +270,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           _formKey.currentState!.save();
-                          APIs.updateUserInfo().then((value) {
+                          UserAPIs.updateUserInfo().then((value) {
                             CustomDialogs.showSnackbar(context, 'Profile Updated SuccessFully!');
                           });
                         }
