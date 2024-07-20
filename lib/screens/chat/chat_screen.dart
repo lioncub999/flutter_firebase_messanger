@@ -11,9 +11,9 @@ import '../../main.dart';
 import '../../models/chat_model.dart';
 import '../../models/user_model.dart';
 
-// ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-// ┃                                    ChatScreen                                    ┃
-// ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+// ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+// ┃                               채팅 메인 화면                               ┃
+// ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
 
@@ -22,7 +22,7 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  // <내가 id가 포함된 채팅방 리스트 데이터> 초기화
+  // <내가 id가 포함된 채팅방 리스트> 초기화
   late List<ChatRoom> _chatRoomList = [];
 
   // 편집 status
@@ -43,7 +43,7 @@ class _ChatScreenState extends State<ChatScreen> {
       // ┃   AppBar   ┃
       // ┗━━━━━━━━━━━━┛
       appBar: AppBar(
-        // Appbar - title 검색
+        // Appbar - title
         title: const Text("쪽지"),
         // Appbar - leading
         leading: TextButton(
@@ -58,7 +58,7 @@ class _ChatScreenState extends State<ChatScreen> {
             )),
         // Appbar - actions
         actions: [
-          // Appbar - actions - 검색 버튼
+          // Appbar - actions - 검색 버튼 ( 개발 예정 )
           IconButton(
               onPressed: () {
                 Navigator.pushReplacement(
@@ -82,7 +82,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 );
               },
               icon: const Icon(Icons.search)),
-          // Appbar - actions - 더보기 버튼
+          // Appbar - actions - 더보기 버튼 ( 개발 예정 )
           IconButton(
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (_) => ProfileScreen(user: APIs.me)));

@@ -49,12 +49,12 @@
 	</array>
 
 	<key>NSPhotoLibraryUsageDescription</key>
-    <string>사진첩좀 써도 됩니까</string>
+    <string>사진 권한을 요청</string>
     <key>NSCameraUsageDescription</key>
-    <string>카메라좀 써도 됩니까</string>
+    <string>카메라 권한을 요청</string>
     <key>NSMicrophoneUsageDescription</key>
-    <string>마이크 권한좀 제발</string>
+    <string>마이크 권한을 요청</string>
     <key>NSUserNotificationsUsageDescription</key>
-    <string>알림 권한좀 주셈.</string>
+    <string>알림 권한 요청</string>
 </dict>
 </plist>

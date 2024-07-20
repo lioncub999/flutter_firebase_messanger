@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:firebase_core/firebase_core.dart';
-import 'package:modu_messenger_firebase/api/chat_apis.dart';
 import 'package:modu_messenger_firebase/screens/common/splash_screen.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
-// ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-// ┃                                    Main.dart                                     ┃
-// ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
-late Size mq; // Global Size Management (Media Query)
+// ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+// ┃                             앱 실행 메인 화면                              ┃
+// ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+// 전영역 크기 관리 mq (Media Query) 초기화
+late Size mq;
 
 // Initialize-Firebase (firebase 초기화)
 _initializeFirebase() async {
@@ -20,14 +20,16 @@ _initializeFirebase() async {
 }
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized(); // WidgetFlutterBinding 인스턴스 초기화
-  _initializeFirebase(); // firebase 초기화
+  // WidgetFlutterBinding 인스턴스 초기화
+  WidgetsFlutterBinding.ensureInitialized();
+  // firebase 초기화
+  _initializeFirebase();
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (c) => MainStore()),
     ],
     child: MaterialApp(
-      // 현지화 옵션
+      // 현지화 (언어 UI) 옵션
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate, // Material Design 위젯 현지화
         GlobalWidgetsLocalizations.delegate, // 일반 Flutter 위젯 현지화
@@ -40,8 +42,9 @@ void main() {
       ],
       // 전체 공통 Theme
       theme: ThemeData(
-          splashFactory: NoSplash.splashFactory, // Ripple Effect 비활성화
-          // AppBar-Theme
+          // Ripple Effect 비활성화
+          splashFactory: NoSplash.splashFactory,
+          // 앱바 공통 Theme
           appBarTheme: const AppBarTheme(
               backgroundColor: Color.fromRGBO(92, 97, 103, 1),
               centerTitle: true,
@@ -52,7 +55,9 @@ void main() {
                 fontSize: 19,
               ),
               iconTheme: IconThemeData(color: Colors.white)),
+          // 공통 폰트
           fontFamily: 'NotoSansKR',
+          // 하단바 공통 Theme
           bottomNavigationBarTheme: const BottomNavigationBarThemeData(
             backgroundColor: Color.fromRGBO(92, 97, 103, 1),
             selectedItemColor: Colors.white,
@@ -74,13 +79,13 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-// Global 변수 관리
+// 전역 State <MainStore>
 class MainStore extends ChangeNotifier {
-  // Tab State
-  int tapState = 0;
+  // 하단 State
+  int bottomTapState = 0;
 
   setTapState(tap) {
-    tapState = tap;
+    bottomTapState = tap;
     notifyListeners();
   }
 }
@@ -96,9 +101,10 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    // Global Size Management (Media Query)
+    // 전영역 크기 관리 mq
     mq = MediaQuery.of(context).size;
     return const Center(
+      // 앱 실행시 스플레시 스크린으로 이동
       child: SplashScreen(),
     );
   }

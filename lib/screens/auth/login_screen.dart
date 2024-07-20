@@ -7,9 +7,9 @@ import 'package:modu_messenger_firebase/screens/home_screen.dart';
 import '../../api/apis.dart';
 import '../../main.dart';
 
-// ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-// ┃                                   LoginScreen                                    ┃
-// ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+// ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+// ┃                                로그인 화면                                 ┃
+// ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -18,6 +18,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  // 로그인 애니메이션 관리
   bool _isAnimate = false;
 
   // ┏━━━━━━━━━━━━━━━┓
@@ -26,6 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
+    // 0.5 초 Duration 으로 애니메이션
     Future.delayed(const Duration(milliseconds: 500), () {
       setState(() {
         _isAnimate = true;
@@ -37,20 +39,24 @@ class _LoginScreenState extends State<LoginScreen> {
   // ┃   로그인 버튼 클릭   ┃
   // ┗━━━━━━━━━━━━━━━━━━━━━━┛
   _handleLoginBtnClick() {
-    CustomDialogs.showProgressBar(context); // 로딩 시작
+    // 로딩 시작
+    CustomDialogs.showProgressBar(context);
 
     _signInWithGoogle().then((user) async {
       Navigator.pop(context); // 로딩 끝
       if (user != null) {
-        // db에 로그인 정보 있으면 그냥 로그인
+        // DB에 로그인 정보 확인
         if ((await APIs.userExists())) {
-          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => const HomeScreen()), (route) => false);
+          // DB에 정보 있으면 홈 화면으로 이동
+          Navigator.pushAndRemoveUntil(
+              context, MaterialPageRoute(builder: (_) => const HomeScreen()), (route) => false);
           CustomDialogs.showSnackbar(context, '로그인 되었습니다');
         }
         // db에 로그인 정보 없으면 데이터 create
         else {
           APIs.createUser().then((value) {
-            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => const HomeScreen()), (route) => false);
+            Navigator.pushAndRemoveUntil(
+                context, MaterialPageRoute(builder: (_) => const HomeScreen()), (route) => false);
             CustomDialogs.showSnackbar(context, '로그인 되었습니다');
           });
         }
@@ -116,7 +122,12 @@ class _LoginScreenState extends State<LoginScreen> {
                             // LoginTitle - Text - "로그인 후"
                             const Row(
                               children: [
-                                Text('로그인', style: TextStyle(fontSize: 25, color: Colors.white, letterSpacing: -0.5, fontWeight: FontWeight.w800)),
+                                Text('로그인',
+                                    style: TextStyle(
+                                        fontSize: 25,
+                                        color: Colors.white,
+                                        letterSpacing: -0.5,
+                                        fontWeight: FontWeight.w800)),
                                 Text(' 후',
                                     style: TextStyle(
                                       fontSize: 25,
@@ -170,7 +181,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white, // Btn-BackgroundColor
-                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15))), // Btn-Shape
+                        shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(15))), // Btn-Shape
                       ),
                       onPressed: () {
                         _handleLoginBtnClick(); // LoginBtn-ClickEvent
@@ -180,7 +192,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       label: RichText(
                         text: const TextSpan(
                             style: TextStyle(color: Colors.black, fontSize: 16),
-                            children: [TextSpan(text: '구글 아이디로 '), TextSpan(text: '로그인', style: TextStyle(fontWeight: FontWeight.w500))]),
+                            children: [
+                              TextSpan(text: '구글 아이디로 '),
+                              TextSpan(text: '로그인', style: TextStyle(fontWeight: FontWeight.w500))
+                            ]),
                       )))
             ],
           ),

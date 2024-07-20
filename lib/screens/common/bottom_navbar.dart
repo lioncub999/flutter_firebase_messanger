@@ -15,7 +15,7 @@ class BottomNavbar extends StatelessWidget {
     return BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         // tapState 로 현재 화면 확인
-        currentIndex: context.watch<MainStore>().tapState,
+        currentIndex: context.watch<MainStore>().bottomTapState,
         onTap: (i) {
           context.read<MainStore>().setTapState(i);
         },
@@ -35,7 +35,6 @@ class BottomNavbar extends StatelessWidget {
             label: '내주변',
             icon: SvgPicture.asset('assets/icons/locationIcon.svg', width: 24, height: 24),
             activeIcon: SvgPicture.asset('assets/icons/locationIcon.svg', width: 24, height: 24),
-
           ),
           // ┏━━━━━━━━━━━━━━━━━┓
           // ┃   채팅 아이콘   ┃

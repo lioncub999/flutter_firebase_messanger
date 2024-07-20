@@ -83,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           )),
-        ][context.watch<MainStore>().tapState], // tapState 에 따라 화면 변경
+        ][context.watch<MainStore>().bottomTapState], // tapState 에 따라 화면 변경
         // ┏━━━━━━━━━━━━━━━━━━┓
         // ┃   BottomNavBar   ┃
         // ┗━━━━━━━━━━━━━━━━━━┛

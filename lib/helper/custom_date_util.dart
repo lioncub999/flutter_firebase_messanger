@@ -51,4 +51,26 @@ class CustomDateUtil {
     final DateTime orgTime = DateTime.fromMillisecondsSinceEpoch(int.parse(date));
     return '${orgTime.year}년 ${orgTime.month}월 ${orgTime.day}일';
   }
+  // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+  // ┃   milliSecondsSinceEpochs -> xxxx-x-x 형식으로 변환                 ┃
+  // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+  static String getPureTime({required BuildContext context, required String date}) {
+    final DateTime orgTime = DateTime.fromMillisecondsSinceEpoch(int.parse(date));
+    return '${orgTime.year}-${orgTime.month}-${orgTime.day}';
+  }
+
+  // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+  // ┃   두 날짜를 인자값으로 받아서 같은날 인지 다른날 인지 확인          ┃
+  // ┃   returnType : bool (true : 다름, false 다름)                       ┃
+  // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+  static bool isDifferentDay(
+      {required BuildContext context,
+      required String currentMessage,
+      required String nextMessage}) {
+    final currentMessageDate = DateTime.fromMillisecondsSinceEpoch(int.parse(currentMessage));
+    final nextMessageDate = DateTime.fromMillisecondsSinceEpoch(int.parse(nextMessage));
+    return currentMessageDate.year != nextMessageDate.year ||
+        currentMessageDate.month != nextMessageDate.month ||
+        currentMessageDate.day != nextMessageDate.day;
+  }
 }
