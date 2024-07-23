@@ -1,15 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:modu_messenger_firebase/helper/custom_dialogs.dart';
 import 'package:modu_messenger_firebase/screens/home_screen.dart';
 
-import '../../api/apis.dart';
 import '../../main.dart';
 
 // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-// ┃                                로그인 화면                                 ┃
+// ┃                             기본정보 입력화면                              ┃
 // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 class InfoInsertScreen extends StatefulWidget {
   const InfoInsertScreen({super.key});
@@ -19,18 +15,16 @@ class InfoInsertScreen extends StatefulWidget {
 }
 
 class _InfoInsertScreenState extends State<InfoInsertScreen> {
-  // ┏━━━━━━━━━━━━━━━┓
-  // ┃   initState   ┃
-  // ┗━━━━━━━━━━━━━━━┛
-  @override
-  void initState() {
-    super.initState();
-  }
+  // 성별 선택
+  int _selectedGender = 0;
 
-  int _selectedValue = 0;
-
+  // 생일 선택
   DateTime _selectedDate = DateTime.now();
 
+  // 기분 선택
+  String _selectedMood = '';
+
+  // ios 날짜 선택 UI
   void _showCupertinoDatePicker(BuildContext context) {
     showModalBottomSheet(
         context: context,
@@ -47,12 +41,10 @@ class _InfoInsertScreenState extends State<InfoInsertScreen> {
               },
             ),
           );
-        }
-    );
+        });
   }
 
-  String _selectedMood = 'No mood selected';
-
+  // 기분 선택 다이얼로그
   void _showMoodDialog() {
     showDialog(
       context: context,
@@ -76,6 +68,7 @@ class _InfoInsertScreenState extends State<InfoInsertScreen> {
     );
   }
 
+  // 기분 선택 다이얼로그 리스트 UI
   Widget _moodOption(String mood) {
     return ListTile(
       title: Text(mood),
@@ -88,6 +81,44 @@ class _InfoInsertScreenState extends State<InfoInsertScreen> {
     );
   }
 
+  // 라디오 버튼 UI
+  Widget _buildCustomRadioButton(int value, String text, String gender) {
+    bool isSelected = _selectedGender == value;
+
+    return InkWell(
+      onTap: () {
+        setState(() {
+          _selectedGender = value;
+        });
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? gender == 'M'
+                  ? Colors.blue
+                  : Colors.pink
+              : Colors.grey[200],
+          borderRadius: BorderRadius.circular(10.0),
+          border: Border.all(color: isSelected ? Colors.blue : Colors.grey),
+        ),
+        child: Text(
+          text,
+          style: TextStyle(
+            color: isSelected ? Colors.white : Colors.black,
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ┏━━━━━━━━━━━━━━━┓
+  // ┃   initState   ┃
+  // ┗━━━━━━━━━━━━━━━┛
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -107,22 +138,31 @@ class _InfoInsertScreenState extends State<InfoInsertScreen> {
                 width: mq.width,
                 height: mq.height * .2,
               ),
-              // 공백 박스
+              // 타이틀 박스
               SizedBox(
                 height: mq.height * .1,
-                child: Text("사용자 정보 입력 화면 (아직 저장은 안됨)", style: TextStyle(color: Colors.white, fontSize: 30),),
+                child: const Text(
+                  "사용자 정보 입력 화면 (아직 저장은 안됨)",
+                  style: TextStyle(color: Colors.white, fontSize: 30),
+                ),
               ),
+              // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+              // ┃  Body - 성별 선택 RADIO   ┃
+              // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
               SizedBox(
                 height: mq.height * .05,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    _buildCustomRadioButton1(0, '남자'),
+                    _buildCustomRadioButton(0, '남자', 'M'),
                     SizedBox(width: 10),
-                    _buildCustomRadioButton2(1, '여자'),
+                    _buildCustomRadioButton(1, '여자', 'G'),
                   ],
                 ),
               ),
+              // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+              // ┃  Body - 생일 선택         ┃
+              // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
               SizedBox(
                 height: mq.height * .15,
                 child: Column(
@@ -131,12 +171,12 @@ class _InfoInsertScreenState extends State<InfoInsertScreen> {
                     GestureDetector(
                       onTap: () => _showCupertinoDatePicker(context),
                       child: Container(
-                        padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+                        padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
                         decoration: BoxDecoration(
                           color: Colors.blue,
                           borderRadius: BorderRadius.circular(10.0),
                         ),
-                        child: Text(
+                        child: const Text(
                           'Select Date',
                           style: TextStyle(
                             color: Colors.white,
@@ -145,10 +185,10 @@ class _InfoInsertScreenState extends State<InfoInsertScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 20.0),
+                    const SizedBox(height: 20.0),
                     Text(
                       'Selected Date: ${_selectedDate.year}-${_selectedDate.month}-${_selectedDate.day}',
-                      style: TextStyle(fontSize: 16.0, color: Colors.white),
+                      style: const TextStyle(fontSize: 16.0, color: Colors.white),
                     ),
                   ],
                 ),
@@ -171,7 +211,7 @@ class _InfoInsertScreenState extends State<InfoInsertScreen> {
                 ),
               ),
               // ┏━━━━━━━━━━━━━━━━━━━━━┓
-              // ┃  Body - LoginBtn    ┃
+              // ┃  Body - 저장 버튼   ┃
               // ┗━━━━━━━━━━━━━━━━━━━━━┛
               SizedBox(
                   width: mq.width * 0.9,
@@ -179,73 +219,19 @@ class _InfoInsertScreenState extends State<InfoInsertScreen> {
                   child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white, // Btn-BackgroundColor
-                        shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(15))), // Btn-Shape
+                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15))), // Btn-Shape
                       ),
                       onPressed: () {
-                        Navigator.pushReplacement(
-                            context, MaterialPageRoute(builder: (_) => HomeScreen()));
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomeScreen()));
                       },
                       // LoginBtn-Element
                       label: RichText(
-                        text: const TextSpan(
-                            style: TextStyle(color: Colors.black, fontSize: 16),
-                            children: [
-                              TextSpan(text: '저장 '),
-                            ]),
+                        text: const TextSpan(style: TextStyle(color: Colors.black, fontSize: 16), children: [
+                          TextSpan(text: '저장 '),
+                        ]),
                       )))
             ],
           ),
         ));
-  }
-  Widget _buildCustomRadioButton1(int value, String text) {
-    bool isSelected = _selectedValue == value;
-
-    return InkWell(
-      onTap: () {
-        setState(() {
-          _selectedValue = value;
-        });
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-        decoration: BoxDecoration(
-          color: isSelected ? Colors.blue : Colors.grey[200],
-          borderRadius: BorderRadius.circular(10.0),
-          border: Border.all(color: isSelected ? Colors.blue : Colors.grey),
-        ),
-        child: Text(
-          text,
-          style: TextStyle(
-            color: isSelected ? Colors.white : Colors.black,
-          ),
-        ),
-      ),
-    );
-  }
-  Widget _buildCustomRadioButton2(int value, String text) {
-    bool isSelected = _selectedValue == value;
-
-    return InkWell(
-      onTap: () {
-        setState(() {
-          _selectedValue = value;
-        });
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-        decoration: BoxDecoration(
-          color: isSelected ? Colors.red : Colors.grey[200],
-          borderRadius: BorderRadius.circular(10.0),
-          border: Border.all(color: isSelected ? Colors.red : Colors.grey),
-        ),
-        child: Text(
-          text,
-          style: TextStyle(
-            color: isSelected ? Colors.white : Colors.black,
-          ),
-        ),
-      ),
-    );
   }
 }
