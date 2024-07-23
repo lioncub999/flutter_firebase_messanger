@@ -15,7 +15,7 @@ class ModuUser {
     required this.id,
     required this.lastActive,
     required this.email,
-    required this.isDefaultInfoSetting,
+    required this.isDefaultInfoSet,
     required this.pushToken,
   });
   late String image;
@@ -30,15 +30,15 @@ class ModuUser {
   late String id;
   late String lastActive;
   late String email;
-  late bool isDefaultInfoSetting;
+  late bool isDefaultInfoSet;
   late String pushToken;
 
   ModuUser.fromJson(Map<String, dynamic> json) {
     image = json['image'] ?? '';
     gender = json['gender'] ?? '';
-    birthDay = json['birthDay'] ?? '';
+    birthDay = json['birth_day'] ?? '';
     theme = json['theme'] ?? '';
-    emotionMsg = json['emotionMsg'] ?? '';
+    emotionMsg = json['emotion_msg'] ?? '';
     introduce = json['introduce'] ?? '';
     name = json['name'] ?? '';
     createdAt = json['created_at'] ?? '';
@@ -46,7 +46,7 @@ class ModuUser {
     id = json['id'] ?? '';
     lastActive = json['last_active'] ?? '';
     email = json['email'] ?? '';
-    isDefaultInfoSetting = json['isDefaultInfoSetting'] ?? false;
+    isDefaultInfoSet = json['is_default_info_set'] ?? false;
     pushToken = json['push_token'] ?? '';
   }
 
@@ -54,9 +54,9 @@ class ModuUser {
     final data = <String, dynamic>{};
     data['image'] = image;
      data['gender'] = gender;
-     data['birthDay'] = birthDay;
+     data['birth_day'] = birthDay;
      data['theme'] = theme;
-     data['emotionMsg'] = emotionMsg;
+     data['emotion_msg'] = emotionMsg;
      data['introduce'] = introduce;
     data['name'] = name;
     data['created_at'] = createdAt;
@@ -64,7 +64,7 @@ class ModuUser {
     data['id'] = id;
     data['last_active'] = lastActive;
     data['email'] = email;
-    data['isDefaultInfoSetting'] = isDefaultInfoSetting;
+    data['is_default_info_set'] = isDefaultInfoSet;
     data['push_token'] = pushToken;
     return data;
   }

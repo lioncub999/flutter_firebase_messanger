@@ -135,7 +135,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             emotionMsg: '',
                             gender: '',
                             introduce: '',
-                            isDefaultInfoSetting: false,
+                            isDefaultInfoSet: false,
                             theme: '');
                         // chatRoomList 의 member 리스트의 첫번째 ID가 나면 두번째 ID를 조회 parameter 저장
                         if (_chatRoomList[index].member[0] == APIs.me.id) {

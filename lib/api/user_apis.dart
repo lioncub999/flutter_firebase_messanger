@@ -22,11 +22,18 @@ class UserAPIs {
   }
 
   // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-  // ┃   ● 유저 정보 업데이트 (name, about)                                ┃
+  // ┃   ● 유저 정보 업데이트 (name)                                       ┃
   // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
   static Future<void> updateUserInfo() async {
     await APIs.fireStore.collection('CL_USER').doc(APIs.user.uid).update({'name': APIs.me.name});
   }
+  // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+  // ┃   ● 유저 기본 정보 업데이트 (gender, birthDay, mood)                ┃
+  // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+  static Future<void> updateUserDefaultInfo() async {
+    await APIs.fireStore.collection('CL_USER').doc(APIs.user.uid).update({'name': APIs.me.name});
+  }
+
 
   // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
   // ┃   ● 유저 프로필 사진 업데이트 (image)                               ┃

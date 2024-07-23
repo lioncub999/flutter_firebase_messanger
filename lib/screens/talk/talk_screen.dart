@@ -185,7 +185,7 @@ class _TalkScreenState extends State<TalkScreen> {
                                       theme: '',
                                       emotionMsg: '',
                                       introduce: '',
-                                      isDefaultInfoSetting: false,
+                                      isDefaultInfoSet: false,
                                       pushToken: '');
                                   return StreamBuilder(
                                       stream: UserAPIs.getUserInfo(talkUser),

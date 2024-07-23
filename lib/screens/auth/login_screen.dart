@@ -48,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (user != null) {
         // DB에 로그인 정보 확인
         if ((await APIs.userExists())) {
-          if(APIs.me.isDefaultInfoSetting) {
+          if(APIs.me.isDefaultInfoSet) {
             Navigator.pushAndRemoveUntil(
                 context, MaterialPageRoute(builder: (_) => const HomeScreen()), (route) => false);
             CustomDialogs.showSnackbar(context, '로그인 되었습니다');

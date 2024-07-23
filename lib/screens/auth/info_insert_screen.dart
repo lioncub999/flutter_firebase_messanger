@@ -193,6 +193,9 @@ class _InfoInsertScreenState extends State<InfoInsertScreen> {
                   ],
                 ),
               ),
+              // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+              // ┃  Body - 기분 선택         ┃
+              // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
               SizedBox(
                 height: mq.height * .15,
                 child: Column(
@@ -222,7 +225,7 @@ class _InfoInsertScreenState extends State<InfoInsertScreen> {
                         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15))), // Btn-Shape
                       ),
                       onPressed: () {
-                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomeScreen()));
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const HomeScreen()));
                       },
                       // LoginBtn-Element
                       label: RichText(
