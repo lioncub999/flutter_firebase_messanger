@@ -51,10 +51,9 @@ class APIs {
       if (user.exists) {
         me = ModuUser.fromJson(user.data()!);
         await getFirebaseMessagingToken();
-
-        APIs.updateActiveStatus(true);
+        await APIs.updateActiveStatus(true);
       } else {
-        createUser().then((value) => getSelfInfo());
+        await createUser().then((value) => getSelfInfo());
       }
     });
   }

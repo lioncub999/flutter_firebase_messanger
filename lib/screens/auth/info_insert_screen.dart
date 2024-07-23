@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:modu_messenger_firebase/models/user_model.dart';
 import 'package:modu_messenger_firebase/screens/home_screen.dart';
 
+import '../../api/user_apis.dart';
 import '../../main.dart';
 
 // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
@@ -30,7 +32,11 @@ class _InfoInsertScreenState extends State<InfoInsertScreen> {
         context: context,
         builder: (BuildContext builder) {
           return Container(
-            height: MediaQuery.of(context).copyWith().size.height / 3,
+            height: MediaQuery
+                .of(context)
+                .copyWith()
+                .size
+                .height / 3,
             child: CupertinoDatePicker(
               initialDateTime: _selectedDate,
               mode: CupertinoDatePickerMode.date,
@@ -96,8 +102,8 @@ class _InfoInsertScreenState extends State<InfoInsertScreen> {
         decoration: BoxDecoration(
           color: isSelected
               ? gender == 'M'
-                  ? Colors.blue
-                  : Colors.pink
+              ? Colors.blue
+              : Colors.pink
               : Colors.grey[200],
           borderRadius: BorderRadius.circular(10.0),
           border: Border.all(color: isSelected ? Colors.blue : Colors.grey),
@@ -225,6 +231,23 @@ class _InfoInsertScreenState extends State<InfoInsertScreen> {
                         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15))), // Btn-Shape
                       ),
                       onPressed: () {
+                        ModuUser user = ModuUser(image: '',
+                            gender: _selectedGender == 0 ? 'M' : 'G',
+                            birthDay: '',
+                            theme: '',
+                            emotionMsg: '',
+                            introduce: '',
+                            name: '',
+                            createdAt: '',
+                            isOnline: false,
+                            id: '',
+                            lastActive: '',
+                            email: '',
+                            isDefaultInfoSet: true,
+                            pushToken: '');
+
+                        UserAPIs.updateUserDefaultInfo(user);
+
                         Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const HomeScreen()));
                       },
                       // LoginBtn-Element

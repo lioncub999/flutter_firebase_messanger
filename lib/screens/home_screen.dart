@@ -6,12 +6,10 @@ import 'package:modu_messenger_firebase/helper/custom_dialogs.dart';
 import 'package:modu_messenger_firebase/screens/auth/login_screen.dart';
 import 'package:modu_messenger_firebase/screens/chat/chat_screen.dart';
 import 'package:modu_messenger_firebase/screens/talk/talk_screen.dart';
-import 'package:modu_messenger_firebase/ttestt/test_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import '../api/apis.dart';
-import '../api/chat_apis.dart';
 import '../main.dart';
 import 'common/bottom_navbar.dart';
 
@@ -32,7 +30,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    APIs.getSelfInfo(); // 로그인 정보 가져오기
+    APIs.getSelfInfo();
+
     _requestNotificationPermission(); // 푸시알림 허용
     // 앱 실행 및 최소화시 isOnline = true or false
     SystemChannels.lifecycle.setMessageHandler((message) {
@@ -63,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
         // ┗━━━━━━━━━━━┛
         body: [
           // 토크 화면 (tapState = 0)
-          TalkScreen(),
+          const TalkScreen(),
           // 내주변 화면 (tapState = 1)
           Center(child: SvgPicture.asset('assets/icons/locationIcon.svg')),
           // 채팅 화면 (tapState = 2)

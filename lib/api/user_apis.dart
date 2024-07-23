@@ -2,8 +2,6 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import '../models/chat_model.dart';
-import '../models/message_model.dart';
 import '../models/user_model.dart';
 import 'apis.dart';
 
@@ -30,8 +28,8 @@ class UserAPIs {
   // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
   // ┃   ● 유저 기본 정보 업데이트 (gender, birthDay, mood)                ┃
   // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
-  static Future<void> updateUserDefaultInfo() async {
-    await APIs.fireStore.collection('CL_USER').doc(APIs.user.uid).update({'name': APIs.me.name});
+  static Future<void> updateUserDefaultInfo(ModuUser user) async {
+    await APIs.fireStore.collection('CL_USER').doc(APIs.user.uid).update({'gender' : user.gender, 'is_default_info_set' : user.isDefaultInfoSet});
   }
 
 

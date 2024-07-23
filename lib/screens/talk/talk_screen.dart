@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:modu_messenger_firebase/api/apis.dart';
 import 'package:modu_messenger_firebase/api/talk_apis.dart';
 import 'package:modu_messenger_firebase/widgets/talk_card.dart';
 
@@ -206,7 +207,6 @@ class _TalkScreenState extends State<TalkScreen> {
                                                 return TalkCard(
                                                     user: users[0], talk: _talkList[index]);
                                               } else {
-                                                print(_talkList[index].creUserId);
                                                 return const SizedBox();
                                               }
                                             } else {

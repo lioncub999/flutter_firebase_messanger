@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:modu_messenger_firebase/screens/common/splash_screen.dart';
 import 'package:provider/provider.dart';
+import 'api/apis.dart';
 import 'firebase_options.dart';
 
 // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
@@ -19,11 +20,11 @@ _initializeFirebase() async {
   );
 }
 
-void main() {
+void main() async{
   // WidgetFlutterBinding 인스턴스 초기화
   WidgetsFlutterBinding.ensureInitialized();
   // firebase 초기화
-  _initializeFirebase();
+  await _initializeFirebase();
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (c) => MainStore()),
