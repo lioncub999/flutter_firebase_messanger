@@ -75,12 +75,17 @@ class APIs {
     final moduUser = ModuUser(
         id: user!.uid,
         name: user!.displayName.toString(),
-        about: "hi",
         image: user!.photoURL.toString(),
         createdAt: time,
         isOnline: false,
         lastActive: time,
         pushToken: '',
+        gender : '',
+        birthDay : '',
+        theme : '',
+        emotionMsg : '',
+        introduce : '',
+        isDefaultInfoSetting: false,
         email: user!.email.toString());
 
     return await fireStore.collection('CL_USER').doc(user.uid).set(moduUser.toJson());

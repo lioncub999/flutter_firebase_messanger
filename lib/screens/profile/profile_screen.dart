@@ -251,16 +251,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     width: mq.width,
                     height: mq.height * 0.03,
                   ),
-                  TextFormField(
-                    initialValue: widget.user.about,
-                    onSaved: (val) => APIs.me.about = val ?? '',
-                    validator: (val) => val != null && val.isNotEmpty ? null : "Required Field",
-                    decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.person, color: Colors.blue),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                        hintText: 'about',
-                        label: const Text("About")),
-                  ),
                   SizedBox(
                     width: mq.width,
                     height: mq.height * 0.03,

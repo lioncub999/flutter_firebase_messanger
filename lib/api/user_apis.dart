@@ -25,7 +25,7 @@ class UserAPIs {
   // ┃   ● 유저 정보 업데이트 (name, about)                                ┃
   // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
   static Future<void> updateUserInfo() async {
-    await APIs.fireStore.collection('CL_USER').doc(APIs.user.uid).update({'name': APIs.me.name, 'about': APIs.me.about});
+    await APIs.fireStore.collection('CL_USER').doc(APIs.user.uid).update({'name': APIs.me.name});
   }
 
   // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓

@@ -123,7 +123,20 @@ class _ChatScreenState extends State<ChatScreen> {
                       itemBuilder: (context, index) {
                         // 채팅방은 무조건 나를 포함 하여 두명인 것으로 고정
                         ModuUser chatUser = ModuUser(
-                            image: '', about: '', name: '', createdAt: '', isOnline: false, id: '', lastActive: '', email: '', pushToken: '');
+                            image: '',
+                            name: '',
+                            createdAt: '',
+                            isOnline: false,
+                            id: '',
+                            lastActive: '',
+                            email: '',
+                            pushToken: '',
+                            birthDay: '',
+                            emotionMsg: '',
+                            gender: '',
+                            introduce: '',
+                            isDefaultInfoSetting: false,
+                            theme: '');
                         // chatRoomList 의 member 리스트의 첫번째 ID가 나면 두번째 ID를 조회 parameter 저장
                         if (_chatRoomList[index].member[0] == APIs.me.id) {
                           chatUser.id = _chatRoomList[index].member[1];

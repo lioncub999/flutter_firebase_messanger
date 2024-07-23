@@ -174,13 +174,18 @@ class _TalkScreenState extends State<TalkScreen> {
                                 itemBuilder: (context, index) {
                                   ModuUser talkUser = ModuUser(
                                       image: '',
-                                      about: '',
                                       name: '',
                                       createdAt: '',
                                       isOnline: false,
                                       id: _talkList[index].creUserId,
                                       lastActive: '',
                                       email: '',
+                                      gender: '',
+                                      birthDay: '',
+                                      theme: '',
+                                      emotionMsg: '',
+                                      introduce: '',
+                                      isDefaultInfoSetting: false,
                                       pushToken: '');
                                   return StreamBuilder(
                                       stream: UserAPIs.getUserInfo(talkUser),
