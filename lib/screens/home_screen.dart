@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:modu_messenger_firebase/helper/custom_dialogs.dart';
+import 'package:modu_messenger_firebase/screens/auth/info_insert_screen.dart';
 import 'package:modu_messenger_firebase/screens/auth/login_screen.dart';
 import 'package:modu_messenger_firebase/screens/chat/chat_screen.dart';
 import 'package:modu_messenger_firebase/screens/talk/talk_screen.dart';
@@ -56,36 +57,50 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        // ┏━━━━━━━━━━━┓
-        // ┃   Body    ┃
-        // ┗━━━━━━━━━━━┛
-        body: [
-          // 토크 화면 (tapState = 0)
-          const TalkScreen(),
-          // 내주변 화면 (tapState = 1)
-          Center(child: SvgPicture.asset('assets/icons/locationIcon.svg')),
-          // 채팅 화면 (tapState = 2)
-          const ChatScreen(),
-          // 더보기 화면 (tapState = 3)
-          Center(
-              child: Scaffold(
-            floatingActionButton: Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: FloatingActionButton(
-                onPressed: () async {
-                  await APIs.auth.signOut();
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const LoginScreen()));
-                  CustomDialogs.showSnackbar(context, '로그아웃 되었습니다(임시)');
-                },
-                child: const Text("로그아웃 임시"),
-              ),
-            ),
-          )),
-        ][context.watch<MainStore>().bottomTapState], // tapState 에 따라 화면 변경
-        // ┏━━━━━━━━━━━━━━━━━━┓
-        // ┃   BottomNavBar   ┃
-        // ┗━━━━━━━━━━━━━━━━━━┛
-        bottomNavigationBar: const BottomNavbar());
+    return FutureBuilder<void>(
+        future: APIs.getSelfInfo(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          } else {
+            if (APIs.me.isDefaultInfoSet && APIs.me.gender.isNotEmpty) {
+              return Scaffold(
+                  // ┏━━━━━━━━━━━┓
+                  // ┃   Body    ┃
+                  // ┗━━━━━━━━━━━┛
+                  body: [
+                    // 토크 화면 (tapState = 0)
+                    const TalkScreen(),
+                    // 내주변 화면 (tapState = 1)
+                    Center(child: SvgPicture.asset('assets/icons/locationIcon.svg')),
+                    // 채팅 화면 (tapState = 2)
+                    const ChatScreen(),
+                    // 더보기 화면 (tapState = 3)
+                    Center(
+                        child: Scaffold(
+                      floatingActionButton: Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: FloatingActionButton(
+                          onPressed: () async {
+                            await APIs.auth.signOut();
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const LoginScreen()));
+                            CustomDialogs.showSnackbar(context, '로그아웃 되었습니다(임시)');
+                          },
+                          child: const Text("로그아웃 임시"),
+                        ),
+                      ),
+                    )),
+                  ][context.watch<MainStore>().bottomTapState], // tapState 에 따라 화면 변경
+                  // ┏━━━━━━━━━━━━━━━━━━┓
+                  // ┃   BottomNavBar   ┃
+                  // ┗━━━━━━━━━━━━━━━━━━┛
+                  bottomNavigationBar: const BottomNavbar());
+            } else {
+              return InfoInsertScreen();
+            }
+          }
+        });
   }
 }
